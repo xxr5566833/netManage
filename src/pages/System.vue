@@ -23,7 +23,7 @@
               联系人
             </h1>
             <h2 class="subtitle ">
-              {{systemInfo.contact}}
+              {{systemInfo.sysContact}}
             </h2>
             <p></p>
             <h1 class="title is-bold">
@@ -37,7 +37,7 @@
               SysOID
             </h1>
             <h2 class="subtitle ">
-              {{systemInfo.objectID}}
+              {{systemInfo.sysObjectId}}
             </h2>
             <p></p>
             <h1 class="title is-bold">
@@ -51,7 +51,7 @@
               系统描述
             </h1>
             <h2 class="subtitle ">
-              {{systemInfo.describe}}
+              {{systemInfo.sysDescr}}
             </h2>
           </div>
           </div>
@@ -78,15 +78,16 @@
         ip: this.$store.state.selectedIp,
         community: this.$store.state.selectedCommunity
       }
-      console.log(para);
       getInfo(para).then((res) => {
         this.systemInfo = res
-        console.log(this.systemInfo)
+        // 为什么sysUpTime要用value?
+        this.systemInfo.sysUpTime = this.systemInfo.sysUpTime.value
       })
+      // 架子啊时间过长可能导致console出错，这里应该是异步加载
     },
     computed: {
       timestamp () {
-        var date = new Date(this.systemInfo.upTime*10)
+        var date = new Date(this.systemInfo.sysUpTime*10)
         var day = date.getDate()
         var hours = date.getHours()
         var minutes = '0' + date.getMinutes()

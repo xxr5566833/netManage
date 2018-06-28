@@ -171,8 +171,8 @@ export default {
         // 这里是获得除了本机地址以外的其他机器的地址
         console.log(res)
         let outgoing = []
-        for (var k = 0; k < res.data.length; k++) {
-          let ip = res.data[k]
+        for (var k = 1; k < res.data.length; k++) {
+          let ip = res.data[k].ipAddress
           outgoing.push(ip)
           let i = -1
           for (var j = 0; j < _this.topoData.length; j++) {

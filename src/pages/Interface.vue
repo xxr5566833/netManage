@@ -26,8 +26,8 @@
                 <tr>
                   <th>Index</th>
                   <th>端口名</th>
-                  <th>IP</th>
-                  <th>子网掩码</th>
+                  <!--<th>IP</th> 以后加，需要实现一些逻辑-->
+                  <!--<th>子网掩码</th>-->
                   <th>状态</th>
                   <th>入流量</th>
                   <th>出流量</th>
@@ -40,20 +40,20 @@
               <tbody>
                 <tr v-for="(i, index) in interfaces">
                   <!-- adminstatus -->
-                  <td>{{i.indexOID}}</td>
-                  <td>{{i.name}}</td>
-                  <td>{{i.ip}}</td>
-                  <td>{{i.netmask}}</td>
-                  <td>{{i.status}}</td>
-                  <td>{{`${i.inbound}M`}}</td>
-                  <td>{{`${i.outbound}M`}}</td>
-                  <td>{{i.mtu}}</td>
-                  <td>{{`${i.speed}M`}}</td>
-                  <td>{{i.physAddress}}</td>
+                  <td>{{i.index}}</td>
+                  <td>{{i.ifDescr}}</td>
+                  <!--<td>{{i.ip}}</td>
+                  <td>{{i.netmask}}</td>-->
+                  <td>{{i.ifOperStatus}}</td>
+                  <td>{{i.inBound}}</td>
+                  <td>{{i.outBound}}</td>
+                  <td>{{i.ifMtu}}</td>
+                  <td>{{i.ifSpeed}}</td>
+                  <td>{{i.ifPhysAddress}}</td>
                   <td>
                     <!-- 这里我把adminstatus改成了status与1或者2的比较，不知道对不对 -->
-                    <button  v-if="i.status === 'DOWN'"  class="btn btn-primary" @click = "open(index)">启用</button>
-                    <button     v-if="i.status === 'UP'"  class="btn btn-danger"  @click = "open(index)">禁用</button>
+                    <button  v-if="i.ifOperStatus === 'DOWN'"  class="btn btn-primary" @click = "open(index)">启用</button>
+                    <button     v-if="i.ifOperStatus === 'UP'"  class="btn btn-danger"  @click = "open(index)">禁用</button>
                   </td>
             
                   
@@ -72,7 +72,7 @@
         </h4>
                         </div>
                         <div class="modal-body">
-                          您确定要{{ interfaces[currentIndex].status === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].name}}的端口吗？
+                          您确定要{{ interfaces[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].name}}的端口吗？
                         </div>
                         <div class="modal-footer">
                           <button type="button"  class="btn btn-default" data-dismiss="modal">关闭
@@ -95,21 +95,12 @@
 <script>
 // 要用方法必须先import
 import { getInterface, setAdminStatus } from '../api/api'
-
-    $('#change').on('show.bs.modal', function (event) {
-          var btnThis = $(event.relatedTarget); //触发事件的按钮
-          console.log(btnThis);
-          /*var modal = $(this);  //当前模态框
-          var modalId = btnThis.data('id');   //解析出data-id的内容
-          var content = btnThis.closest('tr').find('td').eq(2).text();
-          modal.find('.content').val(content);   */      
-    });
 export default {
   name: 'interface',
   props: ['select'],
   data() {
     return {
-      interfaces: [],
+      interfaces: ["ok"],
       currentIndex : 0
     }
   },
@@ -124,10 +115,9 @@ export default {
     getInterface(para).then((res) => {
       // 直接更新interfaces
       this.interfaces = res
-      console.log(res)
-
-
+      console.log(this.interfaces[0].ifOperStatus);
     })
+
   },
   computed: {
 
@@ -146,9 +136,9 @@ export default {
       let vm = this
       var inter = this.interfaces[this.currentIndex]
       console.log(inter);
-      var status = inter.status === 'UP' ? 2 : 1
-      var name = inter.name
-      var index = inter.indexOID
+      var status = inter.ifOperStatus === 'UP' ? 2 : 1
+      var name = inter.ifDescr
+      var index = inter.index
 
 
       let para = {
