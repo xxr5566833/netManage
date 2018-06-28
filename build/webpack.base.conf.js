@@ -24,7 +24,8 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
-      'jquery': 'jquery'
+      'jquery': 'jquery',
+      'assets' : resolve('src/assets'),
     }
   },
   plugins: [
@@ -44,6 +45,10 @@ module.exports = {
         options: {
           formatter: require('eslint-friendly-formatter')
         }
+      },
+      {
+        test: /\.css$/,
+        loader: "style-loader!css-loader",
       },
       {
         test: /\.vue$/,

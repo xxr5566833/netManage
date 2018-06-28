@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // @是/src的别名，但是我还没找到在哪个文件中定义的
+import Welcome from '@/pages/Welcome'
 import Monitor from '@/pages/Monitor'
 import Interface from '@/pages/Interface'
 import RoutingTable from '@/pages/RoutingTable'
@@ -14,6 +15,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Welcome',
+      component: Welcome
+    },
+    {
+      path: '/devList',
       name: 'Monitor',
       component: Monitor
     },

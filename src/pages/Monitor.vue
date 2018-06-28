@@ -7,8 +7,36 @@
             <div class="level">
               <div class="level-left">
                 <p class="level-item"><strong>当前设备</strong></p>
-                <a class="button is-primary is-focused level-item"  @click="prompt">添加设备</a>
-                <a class="button is-info is-focused level-item"  @click="refreshNodeStatus">状态刷新</a>
+                <a data-toggle="modal" data-target="#add-dev" href=""><span class="glyphicon glyphicon-log-in"></span>添加设备</a>
+                <a class="button is-info is-focused level-item" @click="refreshNodeStatus">状态刷新</a>
+              </div>
+              <div id="add-dev" class="modal fade">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <button class="close" data-dismiss="modal"> <span>&times;</span> </button>
+                    </div>
+                    <div class="modal-title">
+                      <h1 class="text-center">添加设备</h1> </div>
+                    <div class="modal-body">
+                      <form class="form-group" action="">
+                        <div class="form-group">
+                          <label for="">设备名称</label>
+                          <input class="form-control" type="text" placeholder="设备名称" v-model='dev.name'> </div>
+                        <div class="form-group">
+                          <label for="">设备ip地址</label>
+                          <input class="form-control" type="text" placeholder="使用点分十进制表示" v-model='dev.ip'> </div>
+                        <div class="form-group">
+                          <label for="">设备Community</label>
+                          <input class="form-control" type="text" placeholder="public" v-model='dev.community'> </div>
+                        <div class="text-right">
+                          <button class="btn btn-primary" type="submit" @click='prompt()' data-dismiss="modal">添加</button>
+                          <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -21,7 +49,7 @@
                   <th>IP</th>
                   <th>Community</th>
                   <th>操作</th>
-               </tr>
+                </tr>
               </thead>
               <tbody>
                 <tr v-for="i in info">
@@ -31,56 +59,85 @@
                   <td>{{i.community}}</td>
                   <td>
                     <router-link to="/system"><a class="button is-info" @click="toDetail(i.ip, i.community)">详情</a></router-link>
-                    <a class="button is-danger" @click="remove(i.id)">删除</a>
+                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#delete">
+                      删除
+                    </button>
+                    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                              &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+          Are you sure?
+        </h4>
+                          </div>
+                          <div class="modal-body">
+                            确定要取消对名称为{{i.name}}的设备的监控吗？
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" @click = "remove(i.id)">
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                    </div>
+                      <!-- /.modal -->
                   </td>
                 </tr>
               </tbody>
             </table>
+            </div>
+            <!-- 这里放置网络拓扑图 -->
+            <div id="network" class="column is-8 is-offset-2 is-hidden-mobile"></div>
           </div>
-          <!-- 这里放置网络拓扑图 -->
-          <div id="network" class="column is-8 is-offset-2 is-hidden-mobile"></div>
         </div>
-
       </div>
-    </div>
   </section>
 </template>
-
-
-
 <script>
-  import $ from 'jquery'
-  import axios from 'axios'
-  import { updateStatus } from '../api/api'
+import $ from 'jquery'
+import axios from 'axios'
+import { updateStatus } from '../api/api'
 export default {
   props: ['select'],
-  data () {
+  data() {
     return {
       selected: {},
       index: 3,
+      dev: {
+        name: '',
+        ip: '',
+        community: ''
+      }
     }
   },
-  mounted () {
+  mounted() {
     this.select(0)
     this.networkReload()
   },
-  created: function () {
+  created: function() {
     //按照需求，设置自动更新
     setInterval(this.refreshNodeStatus, 1000);
   },
   computed: {
-    info () {
+    info() {
       return this.$store.state.info
     },
-    topoData () {
+    topoData() {
       return this.$store.state.topoData
     },
-    nodeStatus () {
+    nodeStatus() {
       return this.$store.state.nodeStatus
     }
   },
   methods: {
-    addNode (device) {
+    addNode(device) {
       let _this = this
       let para = {
         ip: device.ip,
@@ -88,11 +145,11 @@ export default {
       }
       // 检查有没有重复添加吧
       for (var i = 0; i < this.topoData.length; i++) {
-        if(this.topoData[i].key === device.ip)
+        if (this.topoData[i].key === device.ip)
           return
       }
       // 根据这些信息添加设备
-      axios.post('http://localhost:3777/getNetwork', para).then(function (res) {
+      axios.post('http://localhost:3777/getNetwork', para).then(function(res) {
         console.log(res)
         let outgoing = []
         for (var k = 0; k < res.data.length; k++) {
@@ -115,21 +172,21 @@ export default {
         _this.networkReload()
       })
     },
-    delNode (ip) {
+    delNode(ip) {
       let _topoData = this.topoData
       console.log(_topoData)
       for (var i = 0; i < _topoData.length; i++) {
         if (_topoData[i].key === ip) {
           let outgoing = _topoData[i].outgoing
           _topoData.splice(i, 1)
-          for (var j = 0; j< outgoing.length; j++) {
+          for (var j = 0; j < outgoing.length; j++) {
             for (var k = 0; k < _topoData.length; k++) {
               if (_topoData[k].key === outgoing[j]) {
                 let index = _topoData[k].outgoing.indexOf(ip)
-                if(index !== -1) {
+                if (index !== -1) {
                   _topoData[k].outgoing.splice(index, 1)
                   if (_topoData[k].outgoing.length === 0)
-                    _topoData.splice(k,1)
+                    _topoData.splice(k, 1)
                 }
               }
             }
@@ -142,17 +199,17 @@ export default {
       console.log(this.topoData)
       this.networkReload()
     },
-    addNodeStatus (device) {
+    addNodeStatus(device) {
       let para = {
         ip: device.ip,
         community: device.community
       }
       updateStatus(para).then((res) => {
-        this.nodeStatus.push({ip: device.ip, community: device.community, status:res })
+        this.nodeStatus.push({ ip: device.ip, community: device.community, status: res })
         console.log(res)
       })
     },
-    refreshNodeStatus () {
+    refreshNodeStatus() {
       var _this = this
       for (var index in this.nodeStatus) {
         let node = this.nodeStatus[index]
@@ -172,8 +229,7 @@ export default {
                 }
               }
               break
-            }
-            else if (parseInt(index2) === node.status.length-1) {
+            } else if (parseInt(index2) === node.status.length - 1) {
               console.log('in')
               for (var index3 in _this.topoData) {
                 if (_this.topoData[index3].key === node.ip) {
@@ -188,20 +244,12 @@ export default {
       this.networkReload()
     },
     // 这里改变了全局的ip和community
-    toDetail (ip, community) {
+    toDetail(ip, community) {
       this.$store.state.selectedIp = ip
       this.$store.state.selectedCommunity = community
     },
-    remove (id) {
-      this.$dialog.confirm({
-        title: 'Deleting Device ' + name,
-        message: 'Are you sure you want to <strong>delete</strong> your Device? This action cannot be undone.',
-        confirmText: 'Delete Device',
-        type: 'is-danger',
-        onConfirm: () => {
-          this.$toast.open({
-            message: 'Device ' + name + ' deleted!'
-          })
+    remove(id) {
+
           for (var i in this.info) {
             if (this.info[i].id === id) {
               this.delNode(this.info[i].ip)
@@ -210,12 +258,10 @@ export default {
               console.log(this.info)
             }
           }
-        }
-      })
     },
-    prompt () {
+    prompt() {
       var vm = this
-      this.$dialog.prompt({
+      /*this.$dialog.prompt({
         message: `设备名称`,
         placeholder: '',
         maxlength: 20,
@@ -253,7 +299,21 @@ export default {
             }
           })
         }
-      })
+      })*/
+      let newRow = {
+        id: vm.index,
+        name: vm.dev.name,
+        ip: vm.dev.ip,
+        community: vm.dev.community
+      }
+      vm.index++
+      vm.info.push(newRow)
+      // 设置之前的输入为空
+      vm.dev.name = ''
+      vm.dev.ip = ''
+      vm.dev.community = ''
+      vm.addNode(newRow)
+      vm.addNodeStatus(newRow)
     },
     networkReload() {
       // 这里是实现网络拓扑的函数，之后再看
@@ -272,18 +332,18 @@ export default {
         brush: {
           type: "topologynode",
           nodeText: function(data) {
-            if(data.type === "device_up") {
+            if (data.type === "device_up") {
               return data.name;
-            } else if(data.type === "device_down") {
+            } else if (data.type === "device_down") {
               return '!';
             } else {
               return 'N';
             }
           },
           nodeTitle: function(data) {
-            if(data.type == "device_up") {
+            if (data.type == "device_up") {
               return `${data.key}(在线)`;
-            } else if(data.type == "device_down") {
+            } else if (data.type == "device_down") {
               return `${data.key}(离线)`;
             } else {
               return data.name;
@@ -296,20 +356,21 @@ export default {
           move: true
         },
         style: {
-          topologyNodeRadius : 30,
-          topologyNodeFontSize : 40,
-          topologyNodeFontColor : "#fff",
-          topologyNodeTitleFontSize : 8,
-          topologyNodeTitleFontColor : "#333",
+          topologyNodeRadius: 30,
+          topologyNodeFontSize: 40,
+          topologyNodeFontColor: "#fff",
+          topologyNodeTitleFontSize: 8,
+          topologyNodeTitleFontColor: "#333",
         }
       })
     }
   }
 }
-</script>
 
-<style lang="css">
-  #network {
-    height: 600px;
-  }
+</script>
+<style lang="css" scoped>
+#network {
+  height: 600px;
+}
+
 </style>
