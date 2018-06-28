@@ -20,6 +20,7 @@
             </div>
           </div>
           <div class="column is-10 is-offset-1 ">
+            <!-- 如果interfaces是空，那就直接不显示表格 -->
             <table class="table is-bordered" v-if="!(interfaces === '')">
               <thead>
                 <tr>
@@ -63,7 +64,7 @@
 </template>
 
 <script>
-
+  // 要用方法必须先import
   import { getInterface, setAdminStatus } from '../api/api'
 
   export default {
@@ -75,12 +76,15 @@
       }
     },
     mounted () {
+      // prop特性也可以是一个方法，这样就不用通过事件传递了？？
+      // 还可以这样？？
       this.select(1)
       let para = {
         ip: this.$store.state.selectedIp,
         community: this.$store.state.selectedCommunity
       }
       getInterface(para).then((res) => {
+        // 直接更新interfaces
         this.interfaces = res
         console.log(this.interfaces)
       })
@@ -113,6 +117,7 @@
                   ip: vm.$store.state.selectedIp,
                   community: vm.$store.state.selectedCommunity
                 }
+                // 这里需要自己手动重新获取一次数据
                 getInterface(para).then((res) => {
                   vm.interfaces = res
                   console.log(this.interfaces)

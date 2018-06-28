@@ -37,6 +37,7 @@
               </tbody>
             </table>
           </div>
+          <!-- 这里放置网络拓扑图 -->
           <div id="network" class="column is-8 is-offset-2 is-hidden-mobile"></div>
         </div>
 
@@ -63,6 +64,10 @@ export default {
     this.select(0)
     this.networkReload()
   },
+  created: function () {
+    //按照需求，设置自动更新
+    setInterval(this.refreshNodeStatus, 1000);
+  },
   computed: {
     info () {
       return this.$store.state.info
@@ -81,10 +86,12 @@ export default {
         ip: device.ip,
         community: device.community
       }
+      // 检查有没有重复添加吧
       for (var i = 0; i < this.topoData.length; i++) {
         if(this.topoData[i].key === device.ip)
           return
       }
+      // 根据这些信息添加设备
       axios.post('http://localhost:3777/getNetwork', para).then(function (res) {
         console.log(res)
         let outgoing = []
@@ -180,6 +187,7 @@ export default {
       }
       this.networkReload()
     },
+    // 这里改变了全局的ip和community
     toDetail (ip, community) {
       this.$store.state.selectedIp = ip
       this.$store.state.selectedCommunity = community
@@ -248,7 +256,10 @@ export default {
       })
     },
     networkReload() {
+      // 这里是实现网络拓扑的函数，之后再看
+      // 应该是chart.js
       var chart = jui.include("chart.builder")
+      // empty删除#network内所有内容
       $('#network').empty()
       chart('#network', {
         padding: 5,

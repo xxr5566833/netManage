@@ -4,6 +4,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
+    // 全局的存储，可以用于记录一些全局的变量
     info: [
     ],
     topoData: [],

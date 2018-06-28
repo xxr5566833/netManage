@@ -2,7 +2,7 @@
  * Created by shi on 2017/6/26.
  */
 import axios from 'axios'
-
+// 肯定需要换成8080以外的端口的，具体来说就是换成可以提供数据的服务器的端口
 let base = 'http://localhost:3777'
 
 export const getInterface = params => {
@@ -12,6 +12,8 @@ export const getInterface = params => {
     headers: {'Content-Type': 'application/json'},
     data: params
   }).then(res => res.data)
+  //  前面方法执行完后才能执行then
+  //  => 前面是参数，后面是返回值
 }
 
 export const getRoutingTable = params => {

@@ -11,6 +11,7 @@
             <li :class="selectMenu[4].style" @click="select(4)"><router-link to="/trap">Trap</router-link></li>
           </ul>
         </div>
+        <!-- select特性 -->
         <router-view :select="select"></router-view>
       </div>
     </section>
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+  // 提供了很多工具
 var firebase = require('firebase')
 var config = {
   apiKey: 'AIzaSyBe7u9FtZ5ATGU69hfd9NBbHiGCGreSWIM',
@@ -54,6 +56,8 @@ export default {
   methods: {
     ...mapActions(['getInfo', 'getInfoFire']),
     select (menu) {
+      // 为了设置class，感觉有更好的设置方法吧，可以仅仅维护一个int变量，然后
+      //在上面的:class后面加上 变量==特定值，根据true或false来决定是否设置这个class
       this.selectMenu[0].style = ''
       this.selectMenu[1].style = ''
       this.selectMenu[2].style = ''
