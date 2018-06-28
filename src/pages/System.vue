@@ -78,6 +78,7 @@
         ip: this.$store.state.selectedIp,
         community: this.$store.state.selectedCommunity
       }
+      console.log(para);
       getInfo(para).then((res) => {
         this.systemInfo = res
         console.log(this.systemInfo)

@@ -21,7 +21,7 @@
           </div>
           <div class="column is-10 is-offset-1 ">
             <!-- 如果interfaces是空，那就直接不显示表格 -->
-            <table class="table is-bordered" v-if="!(interfaces === '')">
+            <table class="table-bordered table-condensed" style='width:90%' v-if="!(interfaces === '')">
               <thead>
                 <tr>
                   <th>Index</th>
@@ -38,7 +38,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="i in interfaces">
+                <tr v-for="(i, index) in interfaces">
+                  <!-- adminstatus -->
                   <td>{{i.indexOID}}</td>
                   <td>{{i.name}}</td>
                   <td>{{i.ip}}</td>
@@ -51,10 +52,15 @@
                   <td>{{i.physAddress}}</td>
                   <td>
                     <!-- 这里我把adminstatus改成了status与1或者2的比较，不知道对不对 -->
-                    <button  v-if="i.status === 2" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#change">启用</button>
-                    <button   v-if="i.status === 1" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#change">禁用</button>
+                    <button  v-if="i.status === 'DOWN'"  class="btn btn-primary" @click = "open(index)">启用</button>
+                    <button     v-if="i.status === 'UP'"  class="btn btn-danger"  @click = "open(index)">禁用</button>
                   </td>
-                  <div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            
+                  
+                </tr>
+              </tbody>
+            </table>
+            <div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -66,12 +72,12 @@
         </h4>
                         </div>
                         <div class="modal-body">
-                          您确定要<strong>${i.status === 1 ? '启用' : '禁用'}</strong>端口${i.name}吗？
+                          您确定要{{ interfaces[currentIndex].status === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].name}}的端口吗？
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                          <button type="button"  class="btn btn-default" data-dismiss="modal">关闭
                           </button>
-                          <button type="button" class="btn btn-danger" data-dismiss="modal" @click="setStatus(i.indexOID, i.status, i.name)">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal" @click = setStatus()>
                             更改
                           </button>
                         </div>
@@ -80,9 +86,6 @@
                     </div>
                     <!-- /.modal -->
                   </div>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
@@ -93,12 +96,21 @@
 // 要用方法必须先import
 import { getInterface, setAdminStatus } from '../api/api'
 
+    $('#change').on('show.bs.modal', function (event) {
+          var btnThis = $(event.relatedTarget); //触发事件的按钮
+          console.log(btnThis);
+          /*var modal = $(this);  //当前模态框
+          var modalId = btnThis.data('id');   //解析出data-id的内容
+          var content = btnThis.closest('tr').find('td').eq(2).text();
+          modal.find('.content').val(content);   */      
+    });
 export default {
   name: 'interface',
   props: ['select'],
   data() {
     return {
-      interfaces: ''
+      interfaces: [],
+      currentIndex : 0
     }
   },
   mounted() {
@@ -112,17 +124,34 @@ export default {
     getInterface(para).then((res) => {
       // 直接更新interfaces
       this.interfaces = res
-      console.log(this.interfaces)
+      console.log(res)
+
+
     })
   },
   computed: {
 
   },
   methods: {
-    setStatus(index, status, name) {
+    open( index){
+        this.currentIndex = index
+
+        $('#change').modal('show')
+
+    },
+
+    setStatus() {
+      //参数status表示之前的状态
+      // status 表示启用后的状态
       let vm = this
-          status = status == 1 ? 2 : 1
-          let para = {
+      var inter = this.interfaces[this.currentIndex]
+      console.log(inter);
+      var status = inter.status === 'UP' ? 2 : 1
+      var name = inter.name
+      var index = inter.indexOID
+
+
+      let para = {
             ip: vm.$store.state.selectedIp,
             community: vm.$store.state.selectedCommunity,
             index,

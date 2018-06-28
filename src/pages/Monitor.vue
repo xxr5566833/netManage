@@ -59,10 +59,15 @@
                   <td>{{i.community}}</td>
                   <td>
                     <router-link to="/system"><a class="button is-info" @click="toDetail(i.ip, i.community)">详情</a></router-link>
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#delete">
+                    <button class="btn btn-primary btn-lg" @click = "del(i)">
                       删除
                     </button>
-                    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="modal fade" id="deleteDev" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -74,12 +79,12 @@
         </h4>
                           </div>
                           <div class="modal-body">
-                            确定要取消对名称为{{i.name}}的设备的监控吗？
+                            确定要取消对名称为{{getCurrent().name}}的设备的监控吗？
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                             </button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" @click = "remove(i.id)">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" @click = "remove()">
                               Delete
                             </button>
                           </div>
@@ -88,10 +93,6 @@
                       </div>
                     </div>
                       <!-- /.modal -->
-                  </td>
-                </tr>
-              </tbody>
-            </table>
             </div>
             <!-- 这里放置网络拓扑图 -->
             <div id="network" class="column is-8 is-offset-2 is-hidden-mobile"></div>
@@ -114,7 +115,8 @@ export default {
         name: '',
         ip: '',
         community: ''
-      }
+      },
+      currentIndex : 0,
     }
   },
   mounted() {
@@ -123,7 +125,7 @@ export default {
   },
   created: function() {
     //按照需求，设置自动更新
-    setInterval(this.refreshNodeStatus, 1000);
+    setInterval(this.refreshNodeStatus, 3000)
   },
   computed: {
     info() {
@@ -137,6 +139,22 @@ export default {
     }
   },
   methods: {
+    getCurrent(){
+      var infos = this.info;
+      for(var i in infos){
+        var info = infos[i]
+        if(info.id == this.currentIndex)
+        {
+          return infos[i];
+        }
+
+      }
+      return {};
+    },
+    del(i){
+      this.currentIndex = i.id;
+      $('#deleteDev').modal('show')
+    },
     addNode(device) {
       let _this = this
       let para = {
@@ -150,6 +168,7 @@ export default {
       }
       // 根据这些信息添加设备
       axios.post('http://localhost:3777/getNetwork', para).then(function(res) {
+        // 这里是获得除了本机地址以外的其他机器的地址
         console.log(res)
         let outgoing = []
         for (var k = 0; k < res.data.length; k++) {
@@ -218,8 +237,8 @@ export default {
           community: node.community
         }
         updateStatus(para).then((res) => {
-          console.log(node.status)
-          console.log(res)
+          // console.log(node.status)
+          // console.log(res)
           for (var index2 in res) {
             if (node.status[index2] === 'UP' && res[index2] === 'DOWN') {
               for (var index3 in _this.topoData) {
@@ -230,7 +249,7 @@ export default {
               }
               break
             } else if (parseInt(index2) === node.status.length - 1) {
-              console.log('in')
+              // console.log('in')
               for (var index3 in _this.topoData) {
                 if (_this.topoData[index3].key === node.ip) {
                   _this.topoData[index3].type = 'device_up'
@@ -247,11 +266,12 @@ export default {
     toDetail(ip, community) {
       this.$store.state.selectedIp = ip
       this.$store.state.selectedCommunity = community
+      console.log ("to detail")
     },
-    remove(id) {
+    remove() {
 
           for (var i in this.info) {
-            if (this.info[i].id === id) {
+            if (this.info[i].id === this.currentIndex) {
               this.delNode(this.info[i].ip)
               this.info.splice(i, 1)
               this.nodeStatus.splice(i, 1)

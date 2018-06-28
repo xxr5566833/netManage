@@ -102,7 +102,7 @@
                     <li class="active"><span class="glyphicon glyphicon-home"></span>&nbsp;后台首页</li>
                 </ol>
                 <div style="background-color: white">
-                  <router-view> </router-view>
+                  <router-view :select = 'select'> </router-view>
                 </div>
                 
             </div>

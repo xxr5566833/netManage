@@ -46,10 +46,12 @@ module.exports = {
           formatter: require('eslint-friendly-formatter')
         }
       },
-      {
+      // 一加这个就报错。。style和css的顺序已经设置了啊，只能注释掉了
+      /*{
         test: /\.css$/,
         loader: "style-loader!css-loader",
-      },
+        include: [resolve('src'), resolve('test')]
+      },*/
       {
         test: /\.vue$/,
         loader: 'vue-loader',

@@ -12,6 +12,8 @@ Vue.use(Router)
 
 // 路由路径配置，主要是path和component的对应
 export default new Router({
+  // 加了这个就不会出现地址栏多/#
+  mode: 'history',
   routes: [
     {
       path: '/',
