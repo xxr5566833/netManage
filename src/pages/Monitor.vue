@@ -46,6 +46,7 @@
                 <tr>
                   <th>ID</th>
                   <th>名称</th>
+                  <th>类型</th>
                   <th>IP</th>
                   <th>Community</th>
                   <th>操作</th>
@@ -55,6 +56,7 @@
                 <tr v-for="i in info">
                   <td>{{i.id}}</td>
                   <td>{{i.name}}</td>
+                  <td>{{i.deviceType == 0 ? ("主机") : (i.deviceType == 1 ? "交换机" : "路由器")}}</td>
                   <td>{{i.ip}}</td>
                   <td>{{i.community}}</td>
                   <td>
@@ -104,7 +106,7 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import { updateStatus } from '../api/api'
+import { updateStatus , getDeviceType } from '../api/api'
 export default {
   props: ['select'],
   data() {
@@ -114,7 +116,8 @@ export default {
       dev: {
         name: '',
         ip: '',
-        community: ''
+        community: '',
+        type : 0
       },
       currentIndex : 0,
     }
@@ -151,6 +154,7 @@ export default {
       }
       return {};
     },
+
     del(i){
       this.currentIndex = i.id;
       $('#deleteDev').modal('show')
@@ -320,12 +324,24 @@ export default {
           })
         }
       })*/
-      let newRow = {
+      var newRow = {
         id: vm.index,
         name: vm.dev.name,
         ip: vm.dev.ip,
-        community: vm.dev.community
+        community: vm.dev.community,
+        deviceType : 0,
       }
+      // 这里设置newRow的类型
+
+      let para = {
+          ip: vm.dev.ip,
+          community: vm.dev.community
+      }
+      getDeviceType(para).then((res) => {
+        newRow.deviceType = res
+        console.log(newRow)  
+      })
+      console.log(newRow.deviceType)
       vm.index++
       vm.info.push(newRow)
       // 设置之前的输入为空

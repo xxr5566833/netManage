@@ -85,6 +85,9 @@
       })
       // 架子啊时间过长可能导致console出错，这里应该是异步加载
     },
+    methods : {
+      
+    },
     computed: {
       timestamp () {
         var date = new Date(this.systemInfo.sysUpTime*10)

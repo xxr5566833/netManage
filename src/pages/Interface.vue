@@ -72,7 +72,7 @@
         </h4>
                         </div>
                         <div class="modal-body">
-                          您确定要{{ interfaces[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].name}}的端口吗？
+                          您确定要{{ interfaces[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].ifDescr}}的端口吗？
                         </div>
                         <div class="modal-footer">
                           <button type="button"  class="btn btn-default" data-dismiss="modal">关闭
@@ -125,7 +125,6 @@ export default {
   methods: {
     open( index){
         this.currentIndex = index
-
         $('#change').modal('show')
 
     },
@@ -149,7 +148,7 @@ export default {
           }
           setAdminStatus(para).then((res) => {
             console.log(res)
-            if (res.status === 1) {
+            if (res == true) {
               console.log ("成功改变！");
               // 这里需要继续完善，还没学bootstrap如何实现类似于之前的$toast
               /*vm.$toast.open({

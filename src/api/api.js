@@ -25,6 +25,15 @@ export const getRoutingTable = params => {
   }).then(res => res.data)
 }
 
+export const getDeviceType = params => {
+  return axios({
+    method: 'post',
+    url: `${base}/getDeviceType`,
+    headers: {'Content-Type': 'application/json'},
+    data: params
+  }).then(res => res.data)
+}
+
 export const getInfo = params => {
   return axios({
     method: 'post',

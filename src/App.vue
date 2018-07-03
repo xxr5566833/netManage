@@ -111,23 +111,6 @@
     </div>
 </section>
 </header>
-
-<!--
-    <section class="section">
-      <div class="container">
-        <div class="tabs menu-bar">
-          <ul>
-            <li :class="selectMenu[0].style" @click="select(0)"><router-link to="/">设备列表</router-link></li>
-            <li :class="selectMenu[3].style" @click="select(3)"><router-link to="/system">系统信息</router-link></li>
-            <li :class="selectMenu[1].style" @click="select(1)"><router-link to="/interface">端口列表</router-link></li>
-            <li :class="selectMenu[2].style" @click="select(2)"><router-link to="/routingTable">路由表</router-link></li>
-            <li :class="selectMenu[4].style" @click="select(4)"><router-link to="/trap">Trap</router-link></li>
-          </ul>
-        </div>
-        <router-view :select="select"></router-view>
-      </div>
-    </section>
-  -->
   </div>
 </template>
 
