@@ -123,10 +123,10 @@ export default {
     this.select(0)
     this.networkReload()
   },
-  created: function() {
+  /*created: function() {
     //按照需求，设置自动更新
     setInterval(this.refreshNodeStatus, 3000)
-  },
+  },*/
   computed: {
     info() {
       return this.$store.state.info

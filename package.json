@@ -17,9 +17,10 @@
     "express": "^4.15.3",
     "firebase": "^3.8.0",
     "fs": "0.0.1-security",
-    "jquery": "^3.2.1",
+    "jquery": "^2.2.4",
     "jsdom": "^11.1.0",
     "jui-chart": "^2.0.4",
+    "less": "^3.0.0",
     "moment": "^2.18.1",
     "net": "^1.0.2",
     "snmp-native": "^1.1.0",
@@ -28,6 +29,7 @@
     "vue-axios": "^2.0.2",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1",
+    "webpack-dev-server": "^2.7.1",
     "yarn": "^1.7.0"
   },
   "devDependencies": {

@@ -14,8 +14,8 @@
               <div class="column is-2" v-for="i in interfaces">
                 <img src="../assets/icons8-EthernetOn.png" v-if="i.status === 'UP'">
                 <img src="../assets/icons8-EthernetOff.png" v-if="i.status === 'DOWN'">
-                <div class="tag is-success is-medium" v-if="i.status === 'UP'">{{i.name}}</div>
-                <div class="tag is-danger is-medium" v-if="i.status === 'DOWN'">{{i.name}}</div>
+                <div class="tag is-success is-medium" v-if="i.status === 'UP'">{{i.ifDescr}}</div>
+                <div class="tag is-danger is-medium" v-if="i.status === 'DOWN'">{{i.ifDescr}}</div>
               </div>
             </div>
           </div>
@@ -26,6 +26,7 @@
                 <tr>
                   <th>Index</th>
                   <th>端口名</th>
+                  <th>端口类型</th>
                   <!--<th>IP</th> 以后加，需要实现一些逻辑-->
                   <!--<th>子网掩码</th>-->
                   <th>状态</th>
@@ -34,6 +35,7 @@
                   <th>MTU</th>
                   <th>接口速度</th>
                   <th>物理地址</th>
+                  <th>距离上次改变的时间</th>
                   <th>设置管理状态</th>
                 </tr>
               </thead>
@@ -42,6 +44,7 @@
                   <!-- adminstatus -->
                   <td>{{i.index}}</td>
                   <td>{{i.ifDescr}}</td>
+                  <td>{{i.ifType}}</td>
                   <!--<td>{{i.ip}}</td>
                   <td>{{i.netmask}}</td>-->
                   <td>{{i.ifOperStatus}}</td>
@@ -49,7 +52,9 @@
                   <td>{{i.outBound}}</td>
                   <td>{{i.ifMtu}}</td>
                   <td>{{i.ifSpeed}}</td>
+                 
                   <td>{{i.ifPhysAddress}}</td>
+                  <td>{{i.ifLastChange}}</td>
                   <td>
                     <!-- 这里我把adminstatus改成了status与1或者2的比较，不知道对不对 -->
                     <button  v-if="i.ifOperStatus === 'DOWN'"  class="btn btn-primary" @click = "open(index)">启用</button>
