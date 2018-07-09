@@ -9,6 +9,7 @@
                 <h2 class="level-item"><strong>当前设备</strong></h2>
                 <a data-toggle="modal" data-target="#add-dev" href=""><span class="glyphicon glyphicon-plus"></span>添加设备</a>
                 <!--<a class="button is-info is-focused level-item" @click="refreshNodeStatus">状态刷新</a>-->
+
               </div>
               <div id="add-dev" class="modal fade">
                 <div class="modal-dialog">

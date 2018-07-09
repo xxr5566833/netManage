@@ -151,11 +151,11 @@ export default {
       	}
         setAdminStatus(para).then((res) => {
             console.log(res)
-            this.$toast("change interfaces  in it")
+            //this.$toast("change interfaces  in it")
             if (res.status === 1) {
               console.log ("成功改变！");
               // 这里需要继续完善，还没学bootstrap如何实现类似于之前的$toast
-              this.$toast('端口' + name + `${status === 1 ? '启用' : '禁用'}成功`)
+              //this.$toast('端口' + name + `${status === 1 ? '启用' : '禁用'}成功`)
               let para = {
                 ip: vm.$store.state.selectedIp,
                 community: vm.$store.state.selectedCommunity
@@ -166,7 +166,7 @@ export default {
                 console.log(this.interfaces)
               })
             } else {
-              this.$toast( '操作失败')
+              //this.$toast( '操作失败')
               console.log ("失败");
             }
          })

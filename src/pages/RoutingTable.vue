@@ -19,7 +19,7 @@
                   <th>Destination</th>
                   <th>子网掩码</th>
                   <th>下一跳地址</th>
-                  <th>路由类型</th>
+                  <th>协议类型</th>
                   <th>METRIC1</th>
                   <th>Age</th>
               </tr>

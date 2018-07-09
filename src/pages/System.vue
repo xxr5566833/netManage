@@ -54,7 +54,7 @@
               {{systemInfo.sysDescr}}
             </h3>
           </div>
-          </div>
+        </div>
       </div>
     </div>
   </section>
