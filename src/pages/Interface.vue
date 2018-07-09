@@ -117,7 +117,6 @@ export default {
     getInterface(para).then((res) => {
       // 直接更新interfaces
       this.interfaces = res
-
     })
 
   },
