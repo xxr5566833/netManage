@@ -2,7 +2,7 @@
   <section class="hero">
     <div class="hero-body">
       <div class="container">
-      	<navbar :selected = "3"></navbar>
+      	<navbar :selected = "3 "></navbar>
 
         <div class="columns  is-multiline">
           <div class="column is-10 is-offset-1">
@@ -25,15 +25,12 @@
               <thead>
                 <tr>
                   <th>Index</th>
-                  <th>端口名</th>
-                  <th>端口类型</th>
+                  <th>VLAN名</th>
                   <!--<th>IP</th> 以后加，需要实现一些逻辑-->
                   <!--<th>子网掩码</th>-->
-                  <th>状态</th>
                   <th>入流量</th>
                   <th>出流量</th>
                   <th>MTU</th>
-                  <th>接口速度</th>
                   <th>物理地址</th>
                   <th>距离上次改变的时间</th>
                   <th>设置管理状态</th>
@@ -44,15 +41,11 @@
                   <!-- adminstatus -->
                   <td>{{i.index}}</td>
                   <td>{{i.ifDescr}}</td>
-                  <td>{{i.ifType}}</td>
                   <!--<td>{{i.ip}}</td>
                   <td>{{i.netmask}}</td>-->
-                  <td>{{i.ifOperStatus}}</td>
                   <td>{{i.inBound}}</td>
                   <td>{{i.outBound}}</td>
                   <td>{{i.ifMtu}}</td>
-                  <td>{{i.ifSpeed}}</td>
-                 
                   <td>{{i.ifPhysAddress}}</td>
                   <td>{{i.ifLastChange}}</td>
                   <td>

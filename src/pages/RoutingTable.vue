@@ -16,12 +16,10 @@
             <table class="table is-bordered" v-if="!(routingTable === '')" style='width:90%'>
               <thead>
                 <tr>
-                  <th>目标IP</th>
-                  <th>index</th>
+                  <th>Destination</th>
                   <th>子网掩码</th>
                   <th>下一跳地址</th>
                   <th>路由类型</th>
-                  <th>协议类型</th>
                   <th>METRIC1</th>
                   <th>Age</th>
               </tr>
@@ -29,10 +27,8 @@
               <tbody>
                 <tr v-for="i in routingTable">
                   <td>{{i.ipRouteDest}}</td>
-                  <td>{{i.ipRouteIfIndex}}</td>
                   <td>{{i.ipRouteMask}}</td>
                   <td>{{i.ipRouteNextHop}}</td>
-                  <td>{{i.ipRouteType}}</td>
                   <td>{{i.ipRouteProto}}</td>
                   <td>{{i.ipRouteMetric1}}</td>
                   <td>{{i.ipRouteAge}}</td>

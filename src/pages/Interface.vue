@@ -28,16 +28,12 @@
                 <tr>
                   <th>Index</th>
                   <th>端口名</th>
-                  <th>端口类型</th>
                   <!--<th>IP</th> 以后加，需要实现一些逻辑-->
                   <!--<th>子网掩码</th>-->
-                  <th>状态</th>
                   <th>入流量</th>
                   <th>出流量</th>
-                  <th>MTU</th>
-                  <th>接口速度</th>
                   <th>物理地址</th>
-                  <th>距离上次改变的时间</th>
+                  <th>MTU</th>
                   <th>设置管理状态</th>
                 </tr>
               </thead>
@@ -46,17 +42,12 @@
                   <!-- adminstatus -->
                   <td>{{i.index}}</td>
                   <td>{{i.ifDescr}}</td>
-                  <td>{{i.ifType}}</td>
                   <!--<td>{{i.ip}}</td>
                   <td>{{i.netmask}}</td>-->
-                  <td>{{i.ifOperStatus}}</td>
                   <td>{{i.inBound}}</td>
                   <td>{{i.outBound}}</td>
-                  <td>{{i.ifMtu}}</td>
-                  <td>{{i.ifSpeed}}</td>
-                 
                   <td>{{i.ifPhysAddress}}</td>
-                  <td>{{i.ifLastChange}}</td>
+                  <td>{{i.ifMtu}}</td>
                   <td>
                     <!-- 这里我把adminstatus改成了status与1或者2的比较，不知道对不对 -->
                     <button  v-if="i.ifOperStatus === 'DOWN'"  class="btn btn-primary" @click = "open(index)">启用</button>
@@ -79,7 +70,7 @@
         </h4>
                         </div>
                         <div class="modal-body">
-                          您确定要{{ interfaces[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].name}}的端口吗？
+                          您确定要{{ interfaces[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].ifDescr}}的端口吗？
                         </div>
                         <div class="modal-footer">
                           <button type="button"  class="btn btn-default" data-dismiss="modal">关闭
@@ -144,28 +135,27 @@ export default {
     setStatus() {
       //参数status表示之前的状态
       // status 表示启用后的状态
-      let vm = this
-      var inter = this.interfaces[this.currentIndex]
-      console.log(inter);
-      var status = inter.ifOperStatus === 'UP' ? 2 : 1
-      var name = inter.ifDescr
-      var index = inter.index
+      	let vm = this
+      	var inter = this.interfaces[this.currentIndex]
+      	console.log(inter);
+      	var status = inter.ifOperStatus === 'UP' ? 2 : 1
+      	var name = inter.ifDescr
+      	var index = inter.index
+      	console.log("change interfaces")
 
-
-      let para = {
+      	let para = {
             ip: vm.$store.state.selectedIp,
             community: vm.$store.state.selectedCommunity,
             index,
             status,
-          }
-          setAdminStatus(para).then((res) => {
+      	}
+        setAdminStatus(para).then((res) => {
             console.log(res)
+            this.$toast("change interfaces  in it")
             if (res.status === 1) {
               console.log ("成功改变！");
               // 这里需要继续完善，还没学bootstrap如何实现类似于之前的$toast
-              /*vm.$toast.open({
-                message: '端口' + name + `${status === 1 ? '启用' : '禁用'}成功`
-              })*/
+              this.$toast('端口' + name + `${status === 1 ? '启用' : '禁用'}成功`)
               let para = {
                 ip: vm.$store.state.selectedIp,
                 community: vm.$store.state.selectedCommunity
@@ -176,14 +166,10 @@ export default {
                 console.log(this.interfaces)
               })
             } else {
-              /*
-              vm.$toast.open({
-                message: '操作失败'
-              })
-              */
+              this.$toast( '操作失败')
               console.log ("失败");
             }
-          })
+         })
     }
 
   }
