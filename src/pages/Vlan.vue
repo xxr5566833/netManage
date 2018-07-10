@@ -53,8 +53,8 @@
                     <button  v-if="i.ifOperStatus === 'DOWN'"  class="btn btn-primary" @click = "open(index)">启用</button>
                     <button     v-if="i.ifOperStatus === 'UP'"  class="btn btn-danger"  @click = "open(index)">禁用</button>
                   </td>
-            
-                  
+
+
                 </tr>
               </tbody>
             </table>
@@ -70,7 +70,7 @@
         </h4>
                         </div>
                         <div class="modal-body">
-                          您确定要{{ vlans[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{vlans[currentIndex].name}}的端口吗？
+                          您确定要{{ vlans[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{vlans[currentIndex].ifDescr}}的端口吗？
                         </div>
                         <div class="modal-footer">
                           <button type="button"  class="btn btn-default" data-dismiss="modal">关闭
@@ -100,6 +100,7 @@ export default {
   data() {
     return {
       vlans: ["ok"],
+      // 表示当前被选中的vlan的在数组中的下标与vlan自身的index区分开
       currentIndex : 0
     }
   },
@@ -133,7 +134,6 @@ export default {
       // status 表示启用后的状态
       let vm = this
       var vlan = this.vlans[this.currentIndex]
-      console.log(inter);
       var status = vlan.ifOperStatus === 'UP' ? 2 : 1
       var name = vlan.ifDescr
       var index = vlan.index
@@ -147,7 +147,7 @@ export default {
           }
           setAdminStatus(para).then((res) => {
             console.log(res)
-            if (res.status === 1) {
+            if (res === true) {
               console.log ("成功改变！");
               // 这里需要继续完善，还没学bootstrap如何实现类似于之前的$toast
               /*vm.$toast.open({
@@ -160,7 +160,7 @@ export default {
               // 这里需要自己手动重新获取一次数据
               getVlan(para).then((res) => {
                 vm.vlans = res
-                console.log(this.vlans)
+
               })
             } else {
               /*
