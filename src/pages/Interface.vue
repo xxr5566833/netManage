@@ -28,6 +28,7 @@
                 <tr>
                   <th>Index</th>
                   <th>端口名</th>
+                  <th>端口状态</th>
                   <!--<th>IP</th> 以后加，需要实现一些逻辑-->
                   <!--<th>子网掩码</th>-->
                   <th>入流量</th>
@@ -42,6 +43,7 @@
                   <!-- adminstatus -->
                   <td>{{i.index}}</td>
                   <td>{{i.ifDescr}}</td>
+                  <td>{{i.ifOperStatus}}</td>
                   <!--<td>{{i.ip}}</td>
                   <td>{{i.netmask}}</td>-->
                   <td>{{i.inBound}}</td>
@@ -112,7 +114,8 @@ export default {
     // this.select(1)
     let para = {
       ip: this.$store.state.selectedIp,
-      community: this.$store.state.selectedCommunity
+      readcommunity: this.$store.state.selectedreadCommunity,
+      writecommunity: this.$store.state.selectedwriteCommunity
     }
     getInterface(para).then((res) => {
       // 直接更新interfaces
@@ -144,7 +147,8 @@ export default {
 
       	let para = {
             ip: vm.$store.state.selectedIp,
-            community: vm.$store.state.selectedCommunity,
+            readcommunity: vm.$store.state.selectedreadCommunity,
+            writecommunity: vm.$store.state.selectedwriteCommunity,
             index,
             status,
       	}
@@ -157,7 +161,8 @@ export default {
               //this.$toast('端口' + name + `${status === 1 ? '启用' : '禁用'}成功`)
               let para = {
                 ip: vm.$store.state.selectedIp,
-                community: vm.$store.state.selectedCommunity
+                readcommunity: vm.$store.state.selectedreadCommunity,
+                writecommunity: vm.$store.state.selectedwriteCommunity
               }
               // 这里需要自己手动重新获取一次数据
               getInterface(para).then((res) => {

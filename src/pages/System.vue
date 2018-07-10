@@ -78,7 +78,8 @@
     mounted () {
       let para = {
         ip: this.$store.state.selectedIp,
-        community: this.$store.state.selectedCommunity
+        readcommunity: this.$store.state.selectedreadCommunity,
+        writecommunity: this.$store.state.selectedwriteCommunity
       }
       getInfo(para).then((res) => {
         this.systemInfo = res

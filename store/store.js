@@ -10,7 +10,8 @@ const store = new Vuex.Store({
     topoData: [],
     nodeStatus: [],
     selectedIp: '',
-    selectedCommunity: ''
+    selectedreadCommunity: '',
+    selectedwriteCommunity: ''
   },
   getters: {
 

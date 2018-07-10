@@ -28,8 +28,11 @@
                           <label for="">设备ip地址</label>
                           <input class="form-control" type="text" placeholder="请使用点分十进制表示" v-model='dev.ip'> </div>
                         <div class="form-group">
-                          <label for="">设备Community</label>
-                          <input class="form-control" type="text" placeholder="public" v-model='dev.community'> </div>
+                          <label for="">readCommunity</label>
+                          <input class="form-control" type="text" placeholder="public" v-model='dev.readcommunity'> </div>
+                        <div class="form-group">
+                          <label for="">writeCommunity</label>
+                          <input class="form-control" type="text" placeholder="public" v-model='dev.writecommunity'> </div>
                         <div class="text-right">
                           <button class="btn btn-primary" type="submit" @click='prompt()' data-dismiss="modal">添加</button>
                           <button class="btn btn-danger" data-dismiss="modal">取消</button>
@@ -49,7 +52,8 @@
                   <th>名称</th>
                   <th>类型</th>
                   <th>IP</th>
-                  <th>Community</th>
+                  <th>readCommunity</th>
+                  <th>writeCommunity</th>
                   <th>操作</th>
                 </tr>
               </thead>
@@ -59,14 +63,13 @@
                   <td>{{i.name}}</td>
                   <td>{{i.deviceType == 0 ? "主机" : (i.deviceType == 1 ? "二层交换机" : "路由器或三层交换机")}}</td>
                   <td>{{i.ip}}</td>
-                
-                  <td>{{i.community}}</td>
+                  <td>{{i.readcommunity}}</td>
+                  <td>{{i.writecommunity}}</td>
                   <td>
                     <router-link to="/system"><a class="btn btn-default" @click="toDetail(index)">管理</a></router-link>
                     <button class="btn btn-danger" @click = "showRemove(index)">
                       删除
                     </button>
-                    
                   </td>
                 </tr>
               </tbody>
@@ -117,7 +120,8 @@ export default {
       dev: {
         name: '',
         ip: '',
-        community: '',
+        readcommunity: '',
+        writecommunity: '',
         deviceType : ''
       },
       // 存储当前选中的设备的下标（不管是删除还是查看详情）
@@ -162,7 +166,8 @@ export default {
       let _this = this
       let para = {
         ip: device.ip,
-        community: device.community
+        readcommunity: device.readcommunity,
+        writecommunity: device.writecommunity
       }
       // 检查有没有重复添加吧
       for (var i = 0; i < this.topoData.length; i++) {
@@ -224,10 +229,11 @@ export default {
     /*addNodeStatus(device) {
       let para = {
         ip: device.ip,
-        community: device.community
+        readcommunity: device.readcommunity,
+        writecommunity: device.writecommunity
       }
       updateStatus(para).then((res) => {
-        this.nodeStatus.push({ ip: device.ip, community: device.community, status: res })
+        this.nodeStatus.push({ ip: device.ip, readcommunity: device.readcommunity,writecommunity: device.writecommunity, status: res })
         console.log(res)
       })
     },*/
@@ -237,7 +243,8 @@ export default {
         let node = this.nodeStatus[index]
         let para = {
           ip: node.ip,
-          community: node.community
+          readcommunity: node.readcommunity,
+          writecommunity: node.writecommunity
         }
         updateStatus(para).then((res) => {
           // console.log(node.status)
@@ -268,9 +275,11 @@ export default {
     // 这里改变了全局的ip和community
     toDetail(index) {
       var ip = this.info[index].ip
-      var community = this.info[index].community
+      var readcommunity = this.info[index].readcommunity
+      var writecommunity = this.info[index].writecommunity
       this.$store.state.selectedIp = ip
-      this.$store.state.selectedCommunity = community
+      this.$store.state.selectedreadCommunity = readcommunity
+      this.$store.state.selectedwriteCommunity = writecommunity
     },
     remove() {
       this.info.splice(this.currentIndex, 1);
@@ -280,11 +289,13 @@ export default {
       var newRow = {
         name: vm.dev.name,
         ip: vm.dev.ip,
-        community: vm.dev.community
+        readcommunity: vm.dev.readcommunity,
+        writecommunity: vm.dev.writecommunity
       }
       let para = {
         ip: vm.dev.ip,
-        community: vm.dev.community
+        readcommunity: vm.dev.readcommunity,
+        writecommunity: vm.dev.writecommunity
       }
       getDeviceType(para).then((res) => {
         newRow.deviceType = res;
@@ -294,7 +305,8 @@ export default {
       // 设置之前的输入为空
       vm.dev.name = ''
       vm.dev.ip = ''
-      vm.dev.community = ''
+      vm.dev.readcommunity = ''
+      vm.dev.writecommunity = ''
       // vm.addNode(newRow)
       // vm.addNodeStatus(newRow)
     },

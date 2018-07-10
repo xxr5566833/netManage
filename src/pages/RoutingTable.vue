@@ -59,7 +59,8 @@
     mounted () {
       let para = {
         ip: this.$store.state.selectedIp,
-        community: this.$store.state.selectedCommunity
+        readcommunity: this.$store.state.selectedreadCommunity,
+        writecommunity: this.$store.state.selectedwriteCommunity
       }
       getRoutingTable(para).then((res) => {
         this.routingTable = res
