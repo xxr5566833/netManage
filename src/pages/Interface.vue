@@ -55,8 +55,8 @@
                     <button  v-if="i.ifOperStatus === 'DOWN'"  class="btn btn-primary" @click = "open(index)">启用</button>
                     <button     v-if="i.ifOperStatus === 'UP'"  class="btn btn-danger"  @click = "open(index)">禁用</button>
                   </td>
-            
-                  
+
+
                 </tr>
               </tbody>
             </table>
@@ -94,7 +94,7 @@
 </template>
 <script>
 // 要用方法必须先import
-import { getInterface, setAdminStatus } from '../api/api'
+import { getInterface, setAdminStatus, updateStatus } from '../api/api'
 import navbar from "./Navbar.vue"
 export default {
   name: 'interface',
@@ -155,7 +155,7 @@ export default {
         setAdminStatus(para).then((res) => {
             console.log(res)
             //this.$toast("change interfaces  in it")
-            if (res.status === 1) {
+            if (res === true) {
               console.log ("成功改变！");
               // 这里需要继续完善，还没学bootstrap如何实现类似于之前的$toast
               //this.$toast('端口' + name + `${status === 1 ? '启用' : '禁用'}成功`)
@@ -165,9 +165,8 @@ export default {
                 writecommunity: vm.$store.state.selectedwriteCommunity
               }
               // 这里需要自己手动重新获取一次数据
-              getInterface(para).then((res) => {
-                vm.interfaces = res
-                console.log(this.interfaces)
+              updateStatus(para).then((res) => {
+                vm.interfaces[vm.currentIndex].ifOperStatus = res[vm.currentIndex]
               })
             } else {
               //this.$toast( '操作失败')
