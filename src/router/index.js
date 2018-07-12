@@ -7,6 +7,7 @@ import Interface from '@/pages/Interface'
 import RoutingTable from '@/pages/RoutingTable'
 import System from '@/pages/System'
 import Vlan from '@/pages/Vlan'
+import Test from '@/pages/Test'
 Vue.use(Router)
 
 // 路由路径配置，主要是path和component的对应
@@ -18,6 +19,11 @@ export default new Router({
       path: '/',
       name: 'Welcome',
       component: Welcome
+    },
+    {
+      path: '/Test',
+      name: 'Test',
+      component: Test
     },
     {
       path: '/devList',

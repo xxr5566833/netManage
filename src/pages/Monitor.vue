@@ -101,8 +101,10 @@
                     </div>
                       <!-- /.modal -->
             </div>
+          <a class="button is-info is-focused level-item" @click="refreshNetGraph">状态刷新</a>
             <!-- 这里放置网络拓扑图 -->
-            <div id="network" style="width: 600px;height:400px;" class="column is-8 is-offset-2 is-hidden-mobile"></div>
+          <div id="NetGraph" style="height:400px;"></div>
+          </div>
           </div>
         </div>
       </div>
@@ -134,9 +136,14 @@ export default {
         series : [
           {
             type: 'graph',
-            layout: 'none',
+            layout: 'force',
+            draggable: 'true',
             symbolSize: 50,
             roam: true,
+            force:{
+              repulsion:400,
+              edgeLength:200,
+            },
             label: {
               normal: {
                 show: true
@@ -151,9 +158,47 @@ export default {
                 }
               }
             },
-            data: [ ],
+            categories:[{
+              name:"R",
+              symbol:'image://../assets/R.png'
+            },{
+              name:"S",
+              symbol:'image://../assets/S.jpg'
+            }
+            ],
+            lineStyle:{
+              type:'dotted'
+            },
+            data: [{
+              name: '节点1'
+            }, {
+              name: '节点2'
+            }, {
+              name: '节点3'
+            }, {
+              name: '节点4'
+            }],
             // links: [],
-            links: [ ],
+            links: [ {
+              source: '节点2',
+              target: '节点1',
+            },{
+              source: '节点1',
+              target: '节点2',
+            },
+              {
+              source: '节点1',
+              target: '节点3'
+            }, {
+              source: '节点2',
+              target: '节点3'
+            }, {
+              source: '节点2',
+              target: '节点4'
+            }, {
+              source: '节点1',
+              target: '节点4'
+            }],
             lineStyle: {
               normal: {
                 opacity: 0.9,
@@ -163,14 +208,13 @@ export default {
             }
           }
         ]
-      };
+      },
       // 存储当前选中的设备的下标（不管是删除还是查看详情）
       currentIndex : 0,
     }
   },
-  /*mounted() {
-    this.networkReload()
-  },*/
+  mounted() {
+  },
   /*created: function() {
     //按照需求，设置自动更新
     setInterval(this.refreshNodeStatus, 3000)
@@ -187,6 +231,24 @@ export default {
     }
   },
   methods: {
+    initChart(){
+        var echarts = require('echarts');
+        var vm=this;
+        this.chart1=echarts.init(document.getElementById("NetGraph"));
+        this.chart1.showLoading();
+        getDeviceType().then((res) => {
+        vm.chart1.hideLoading();
+        vm.option.data=res.data;
+        vm.option.link=res.link;
+        console.log(res);
+      })
+        //this.chart1.setOption(this.option)
+    },
+    refreshNetGraph(){
+      this.$nextTick(() => {
+        this.initChart()
+      })
+    },
     getCurrent(){
       var infos = this.info;
       for(var i in infos){
@@ -341,8 +403,9 @@ export default {
       }
 
       getDeviceType(para).then((res) => {
-        newRow.deviceType = res
-        console.log(res)
+        this,refreshNetGraph();
+        newRow.deviceType = res;
+        console.log(res);
       })
       getNetGraph(para).then((res) =>{
         var reNetGraph = res
