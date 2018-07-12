@@ -5,54 +5,68 @@
         <navbar :selected = "0"></navbar>
         <div class="columns  is-multiline">
           <div class="column is-10 is-offset-1">
-            <h2 class="title is-bold">
+            <h4 class="title is-bold">
               系统名称
-            </h2>
-            <h3 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysName}}
-            </h3>
+            </h4>
             <p></p>
-            <h2 class="title is-bold">
+            <h4 class="title is-bold">
               系统IP
-            </h2>
-            <h3 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{$store.state.selectedIp}}
-            </h3>
+            </h4>
             <p></p>
-            <h2 class="title is-bold">
+            <h4 class="title is-bold">
               联系人
-            </h2>
-            <h3 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysContact}}
-            </h3>
+            </h4>
             <p></p>
-            <h2 class="title is-bold">
+            <h4 v-if="systemInfo.systype==0"  class="title is-bold">
+              CPU
+            </h4>
+            <h4 v-if="systemInfo.systype==0" class="subtitle ">
+              {{systemInfo.sysCPU}}
+            </h4>
+            <p></p>
+            <h4 v-if="systemInfo.systype==0" class="title is-bold">
+              内存
+            </h4>
+            <h4 v-if="systemInfo.systype==0" class="subtitle ">
+              {{systemInfo.sysROM}}
+            </h4>
+            <p></p>
+            <h4 class="title is-bold">
               位置
-            </h2>
-            <h3 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysLocation}}
-            </h3>
+            </h4>
             <p></p>
-            <h2 class="title is-bold">
+            <h4 class="title is-bold">
               SysOID
-            </h2>
-            <h3 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysObjectId}}
-            </h3>
+            </h4>
             <p></p>
-            <h2 class="title is-bold">
+            <h4 class="title is-bold">
               启动时间
-            </h2>
-            <h3 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{timestamp}}
-            </h3>
+            </h4>
             <p></p>
-            <h2 class="title is-bold">
+            <h4 class="title is-bold">
               系统描述
-            </h2>
-            <h3 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysDescr}}
-            </h3>
+            </h4>
           </div>
         </div>
       </div>

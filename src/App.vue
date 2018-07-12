@@ -79,7 +79,7 @@
                     <div class="panel panel-default menu-first">
                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
                            aria-expanded="false" aria-controls="collapseThree">
-                            <i class="icon-book icon-large"></i> 其他管理</a>
+                          <router-link to = '/Test'><i class="icon-book icon-large"></i> 其他管理</router-link></a>
                         </a>
 
                         <div id="collapseThree" class="panel-collapse collapse">
@@ -103,7 +103,7 @@
                 <div style="background-color: white">
                   <router-view > </router-view>
                 </div>
-                
+
             </div>
             <!--右侧内容结束-->
         </div>
