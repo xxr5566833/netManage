@@ -117,7 +117,13 @@ import { updateStatus, getDeviceType, getNetGraph} from '../api/api'
 export default {
   data() {
     return {
+      categoryR:'image://../../static/R.png',
+      categoryS:'image://../../static/S.jpg',
       selected: {},
+      symbols :[
+        "image://../../static/R.png",
+        "image://../../static/S.jpg"
+      ],
       // index 默认从1开始
       dev: {
         name: '',
@@ -149,7 +155,7 @@ export default {
                 show: true
               }
             },
-            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbol: ['circle', 'circle'],
             edgeSymbolSize: [4, 10],
             edgeLabel: {
               normal: {
@@ -160,23 +166,33 @@ export default {
             },
             categories:[{
               name:"R",
-              symbol:'image://../assets/R.png'
+              symbol:'image://../../static/R.png'
             },{
               name:"S",
-              symbol:'image://../assets/S.jpg'
-            }
+              symbol:'image://../../static/S.jpg'
+            },
+              {
+                name:"PC"
+              }
             ],
             lineStyle:{
               type:'dotted'
             },
             data: [{
-              name: '节点1'
+              name: '节点1',
+              symbol:"",
             }, {
-              name: '节点2'
+              name: '节点2',
+              category:1,
+              symbol:"",
             }, {
-              name: '节点3'
+              name: '节点3',
+              category:2,
+              symbol:"",
             }, {
-              name: '节点4'
+              name: '节点4',
+              category:0,
+              symbol:"",
             }],
             // links: [],
             links: [ {
@@ -236,17 +252,37 @@ export default {
         var vm=this;
         this.chart1=echarts.init(document.getElementById("NetGraph"));
         this.chart1.showLoading();
-        getDeviceType().then((res) => {
-        vm.chart1.hideLoading();
-        vm.option.data=res.data;
-        vm.option.link=res.link;
-        console.log(res);
+        console.log(vm.option);
+        getNetGraph().then((res) => {
+          vm.chart1.hideLoading();
+          vm.option.series[0].data=res.data;
+          console.log( vm.option.series[0].data[0]);
+          for (var i in vm.option.series[0].data){
+            if (vm.option.series[0].data[i].category==0)
+            {
+              //vm.option.series[0].data[i].prototype.symbol=null;
+              vm.option.series[0].data[i].symbol = vm.categoryR;
+            }
+            else if(vm.option.series[0].data[i].category==1)
+            {// vm.option.series[0].data[i].prototype.symbol=null;
+              vm.option.series[0].data[i].symbol = vm.categoryS;}
+          }
+          vm.option.series[0].links=res.link;
+          console.log( vm.option.series[0].data[0]);
+          console.log(vm.option);
+          console.log("graph right");
+          vm.chart1.setOption(vm.option)
       })
-        //this.chart1.setOption(this.option)
+
     },
     refreshNetGraph(){
+      var echarts = require('echarts');
+      var vm=this;
+      /*this.chart1=echarts.init(document.getElementById("NetGraph"));
+      console.log(vm.option);
+      vm.chart1.setOption(vm.option);*/
       this.$nextTick(() => {
-        this.initChart()
+       this.initChart()
       })
     },
     getCurrent(){
@@ -406,14 +442,6 @@ export default {
         this,refreshNetGraph();
         newRow.deviceType = res;
         console.log(res);
-      })
-      getNetGraph(para).then((res) =>{
-        var reNetGraph = res
-        option.data=reNetGraph.data
-        option.link=reNetGraph.link
-        this.$nextTick(function () {
-          
-        })
       })
       vm.info.push(newRow)
       // 设置之前的输入为空
