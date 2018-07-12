@@ -388,17 +388,20 @@ export default {
     },
     prompt() {
       var vm = this
+      // 注意在定义newRow时尽可能吧所有的属性都初始化
       var newRow = {
         name: vm.dev.name,
         ip: vm.dev.ip,
         readcommunity: vm.dev.readcommunity,
-        writecommunity: vm.dev.writecommunity
+        writecommunity: vm.dev.writecommunity,
+        deviceType : -1,
       }
       let para = {
         ip: vm.dev.ip,
         readcommunity: vm.dev.readcommunity,
         writecommunity: vm.dev.writecommunity
       }
+      
       getDeviceType(para).then((res) => {
         this,refreshNetGraph();
         newRow.deviceType = res;
