@@ -102,7 +102,7 @@
                       <!-- /.modal -->
             </div>
             <!-- 这里放置网络拓扑图 -->
-            <div id="network" class="column is-8 is-offset-2 is-hidden-mobile"></div>
+            <div id="network" style="width: 600px;height:400px;" class="column is-8 is-offset-2 is-hidden-mobile"></div>
           </div>
         </div>
       </div>
@@ -111,7 +111,7 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import { updateStatus, getDeviceType} from '../api/api'
+import { updateStatus, getDeviceType, getNetGraph} from '../api/api'
 export default {
   data() {
     return {
@@ -124,6 +124,46 @@ export default {
         writecommunity: '',
         deviceType : ''
       },
+      option : {
+        title: {
+          text: '网络拓扑图'
+        },
+        tooltip: {},
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series : [
+          {
+            type: 'graph',
+            layout: 'none',
+            symbolSize: 50,
+            roam: true,
+            label: {
+              normal: {
+                show: true
+              }
+            },
+            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbolSize: [4, 10],
+            edgeLabel: {
+              normal: {
+                textStyle: {
+                  fontSize: 20
+                }
+              }
+            },
+            data: [ ],
+            // links: [],
+            links: [ ],
+            lineStyle: {
+              normal: {
+                opacity: 0.9,
+                width: 2,
+                curveness: 0
+              }
+            }
+          }
+        ]
+      };
       // 存储当前选中的设备的下标（不管是删除还是查看详情）
       currentIndex : 0,
     }
@@ -299,10 +339,18 @@ export default {
         readcommunity: vm.dev.readcommunity,
         writecommunity: vm.dev.writecommunity
       }
-      
+
       getDeviceType(para).then((res) => {
         newRow.deviceType = res
         console.log(res)
+      })
+      getNetGraph(para).then((res) =>{
+        var reNetGraph = res
+        option.data=reNetGraph.data
+        option.link=reNetGraph.link
+        this.$nextTick(function () {
+          
+        })
       })
       vm.info.push(newRow)
       // 设置之前的输入为空
@@ -366,9 +414,4 @@ export default {
 }
 
 </script>
-<style lang="css" scoped>
-#network {
-  height: 600px;
-}
 
-</style>

@@ -26,6 +26,16 @@ export const getDeviceType = params => {
   //  前面方法执行完后才能执行then
   //  => 前面是参数，后面是返回值
 }
+export const getNetGraph = params => {
+  return axios({
+    method: 'post',
+    url: `${base}/getNetGraph`,
+    headers: {'Content-Type': 'application/json'},
+    data: params
+  }).then(res => res.data)
+  //  前面方法执行完后才能执行then
+  //  => 前面是参数，后面是返回值
+}
 
 export const getVlan = params => {
   return axios({
