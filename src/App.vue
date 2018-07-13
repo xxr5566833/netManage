@@ -55,11 +55,10 @@
 
                         <div id="collapseOne" class="panel-collapse collapse " >
                             <ul class="nav nav-list menu-second">
-                                <li :class="selectMenu[0].style" @click="select(3)"><router-link to = '/devList'><i class="icon-user"></i>设备增删 </router-link></li>
-                                <li :class = "selectMenu[3].style" @click="select(3)"><router-link to = '/system'><i class="icon-edit"></i> 设备信息</router-link></li>
+                                <li><router-link to = '/devList'><i class="icon-wrench"></i>设备总览</router-link></li>
+                                <!-- <li :class = "selectMenu[3].style" @click="select(3)"><router-link to = '/system'><i class="icon-edit"></i> 设备信息</router-link></li>
                                 <li :class = "selectMenu[1].style" @click = "select(1)"><router-link to = '/interface'><i class="icon-edit"></i> 端口列表</router-link></li>
-                                <li :class = "selectMenu[2].style" @click = "select(2)"><router-link to = "/routingTable"><i class="icon-list"></i> 路由表</router-link></li>
-                                <li :class = "selectMenu[4].style" @click = "select(4)"><router-link to = "/trap"><i class="icon-list"></i> Trap</router-link></li>
+                                <li :class = "selectMenu[2].style" @click = "select(2)"><router-link to = "/routingTable"><i class="icon-list"></i> 路由表</router-link></li> -->
                             </ul>
                         </div>
                     </div>
@@ -80,7 +79,7 @@
                     <div class="panel panel-default menu-first">
                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
                            aria-expanded="false" aria-controls="collapseThree">
-                            <i class="icon-book icon-large"></i> 其他管理</a>
+                          <router-link to = '/Test'><i class="icon-book icon-large"></i> 其他管理</router-link></a>
                         </a>
 
                         <div id="collapseThree" class="panel-collapse collapse">
@@ -102,9 +101,9 @@
                     <li class="active"><span class="glyphicon glyphicon-home"></span>&nbsp;后台首页</li>
                 </ol>
                 <div style="background-color: white">
-                  <router-view :select = 'select'> </router-view>
+                  <router-view > </router-view>
                 </div>
-                
+
             </div>
             <!--右侧内容结束-->
         </div>
@@ -131,38 +130,13 @@ export default {
   name: 'app',
   data () {
     return {
-      selectMenu: [{
-        style: ''
-      },
-      {
-        style: ''
-      },
-      {
-        style: ''
-      },
-        {
-          style: ''
-        },
-      {
-        style: ''
-      }],
       InFire: []
     }
   },
   methods: {
     ...mapActions(['getInfo', 'getInfoFire']),
-    select (menu) {
-      // 为了设置class，感觉有更好的设置方法吧，可以仅仅维护一个int变量，然后
-      //在上面的:class后面加上 变量==特定值，根据true或false来决定是否设置这个class
-      this.selectMenu[0].style = ''
-      this.selectMenu[1].style = ''
-      this.selectMenu[2].style = ''
-      this.selectMenu[3].style = ''
-      this.selectMenu[4].style = ''
-      this.selectMenu[menu].style = 'is-active'
-    }
   },
-  mounted () {
+  /*mounted () {
     this.select(0)
     // var Info = firebase.database().ref('/info')
     // Info.on('child_changed', function (snapshot) {
@@ -186,7 +160,7 @@ export default {
     //     vm.InFire.push(data)
     //   }
     // })
-  }
+  }*/
 }
 </script>
 

@@ -46,14 +46,14 @@
 
   export default {
     name: 'Trap',
-    props: ['select'],
+    // props: ['select'],
     data () {
       return {
         traps: ''
       }
     },
     mounted () {
-      this.select(4)
+      // this.select(4)
       getTraps().then((res) => {
         this.traps = res
         console.log(this.traps)

@@ -2,20 +2,18 @@
   <section class="hero">
     <div class="hero-body">
       <div class="container">
-      	<navbar :selected = "1"></navbar>
+      	<navbar :selected = "3 "></navbar>
 
         <div class="columns  is-multiline">
           <div class="column is-10 is-offset-1">
             <h1 class="title is-bold">
-              端口列表
+              vlan列表
             </h1>
             <h2 class="subtitle ">
               {{$store.state.selectedIp}}
             </h2>
             <div class="columns is-multiline">
-              <div class="column is-2" v-for="i in interfaces">
-                <img src="../assets/icons8-EthernetOn.png" v-if="i.status === 'UP'">
-                <img src="../assets/icons8-EthernetOff.png" v-if="i.status === 'DOWN'">
+              <div class="column is-2" v-for="i in vlans">
                 <div class="tag is-success is-medium" v-if="i.status === 'UP'">{{i.ifDescr}}</div>
                 <div class="tag is-danger is-medium" v-if="i.status === 'DOWN'">{{i.ifDescr}}</div>
               </div>
@@ -23,23 +21,24 @@
           </div>
           <div class="column is-10 is-offset-1 ">
             <!-- 如果interfaces是空，那就直接不显示表格 -->
-            <table class="table-bordered table-condensed" style='width:90%' v-if="!(interfaces === '')">
+            <table class="table-bordered table-condensed" style='width:90%' v-if="!(vlans === '')">
               <thead>
                 <tr>
                   <th>Index</th>
-                  <th>端口名</th>
-                  <th>端口状态</th>
+                  <th>VLAN名</th>
+                  <th>VLAN状态</th>
                   <!--<th>IP</th> 以后加，需要实现一些逻辑-->
                   <!--<th>子网掩码</th>-->
                   <th>入流量</th>
                   <th>出流量</th>
-                  <th>物理地址</th>
                   <th>MTU</th>
+                  <th>物理地址</th>
+                  <th>距离上次改变的时间</th>
                   <th>设置管理状态</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(i, index) in interfaces">
+                <tr v-for="(i, index) in vlans">
                   <!-- adminstatus -->
                   <td>{{i.index}}</td>
                   <td>{{i.ifDescr}}</td>
@@ -48,8 +47,9 @@
                   <td>{{i.netmask}}</td>-->
                   <td>{{i.inBound}}</td>
                   <td>{{i.outBound}}</td>
-                  <td>{{i.ifPhysAddress}}</td>
                   <td>{{i.ifMtu}}</td>
+                  <td>{{i.ifPhysAddress}}</td>
+                  <td>{{i.ifLastChange}}</td>
                   <td>
                     <!-- 这里我把adminstatus改成了status与1或者2的比较，不知道对不对 -->
                     <button  v-if="i.ifOperStatus === 'DOWN'"  class="btn btn-primary" @click = "open(index)">启用</button>
@@ -72,7 +72,7 @@
         </h4>
                         </div>
                         <div class="modal-body">
-                          您确定要{{ interfaces[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].ifDescr}}的端口吗？
+                          您确定要{{ vlans[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{vlans[currentIndex].ifDescr}}的端口吗？
                         </div>
                         <div class="modal-footer">
                           <button type="button"  class="btn btn-default" data-dismiss="modal">关闭
@@ -94,14 +94,15 @@
 </template>
 <script>
 // 要用方法必须先import
-import { getInterface, setAdminStatus, updateStatus } from '../api/api'
+import { getVlan, setAdminStatus } from '../api/api'
 import navbar from "./Navbar.vue"
 export default {
-  name: 'interface',
+  name: 'vlan',
   // props: ['select'],
   data() {
     return {
-      interfaces: ["ok"],
+      vlans: ["ok"],
+      // 表示当前被选中的vlan的在数组中的下标与vlan自身的index区分开
       currentIndex : 0
     }
   },
@@ -110,16 +111,15 @@ export default {
   },
   mounted() {
     // prop特性也可以是一个方法，这样就不用通过事件传递了？？
-    // 还可以这样？？
     // this.select(1)
     let para = {
       ip: this.$store.state.selectedIp,
       readcommunity: this.$store.state.selectedreadCommunity,
       writecommunity: this.$store.state.selectedwriteCommunity
     }
-    getInterface(para).then((res) => {
+    getVlan(para).then((res) => {
       // 直接更新interfaces
-      this.interfaces = res
+      this.vlans = res
     })
 
   },
@@ -130,48 +130,52 @@ export default {
     open( index){
         this.currentIndex = index
         $('#change').modal('show')
-
     },
 
     setStatus() {
       //参数status表示之前的状态
       // status 表示启用后的状态
-      	let vm = this
-      	var inter = this.interfaces[this.currentIndex]
-      	console.log(inter);
-      	var status = inter.ifOperStatus === 'UP' ? 2 : 1
-      	var name = inter.ifDescr
-      	var index = inter.index
-      	console.log("change interfaces")
+      let vm = this
+      var vlan = this.vlans[this.currentIndex]
+      var status = vlan.ifOperStatus === 'UP' ? 2 : 1
+      var name = vlan.ifDescr
+      var index = vlan.index
 
-      	let para = {
+
+      let para = {
             ip: vm.$store.state.selectedIp,
             readcommunity: vm.$store.state.selectedreadCommunity,
             writecommunity: vm.$store.state.selectedwriteCommunity,
             index,
             status,
-      	}
-        setAdminStatus(para).then((res) => {
+          }
+          setAdminStatus(para).then((res) => {
             console.log(res)
-            //this.$toast("change interfaces  in it")
             if (res === true) {
               console.log ("成功改变！");
               // 这里需要继续完善，还没学bootstrap如何实现类似于之前的$toast
-              //this.$toast('端口' + name + `${status === 1 ? '启用' : '禁用'}成功`)
+              /*vm.$toast.open({
+                message: '端口' + name + `${status === 1 ? '启用' : '禁用'}成功`
+              })*/
               let para = {
                 ip: vm.$store.state.selectedIp,
                 readcommunity: vm.$store.state.selectedreadCommunity,
                 writecommunity: vm.$store.state.selectedwriteCommunity
               }
               // 这里需要自己手动重新获取一次数据
-              updateStatus(para).then((res) => {
-                vm.interfaces[vm.currentIndex].ifOperStatus = res[vm.currentIndex]
+              getVlan(para).then((res) => {
+                vm.vlans = res
+
               })
             } else {
-              //this.$toast( '操作失败')
+              /*
+              vm.$toast.open({
+                message: '操作失败'
+              })
+              */
               console.log ("失败");
             }
-         })
+          })
     }
 
   }

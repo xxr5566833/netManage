@@ -15,6 +15,44 @@ export const getInterface = params => {
   //  前面方法执行完后才能执行then
   //  => 前面是参数，后面是返回值
 }
+export const getNetGrapf = params => {
+  return axios({
+    method: 'get',
+    url: `${base}/getInterface`
+  }).then(res => res.data)
+  //  前面方法执行完后才能执行then
+  //  => 前面是参数，后面是返回值
+}
+
+export const getDeviceType = params => {
+  return axios({
+    method: 'post',
+    url: `${base}/getDeviceType`,
+    headers: {'Content-Type': 'application/json'},
+    data: params
+  }).then(res => res.data)
+  //  前面方法执行完后才能执行then
+  //  => 前面是参数，后面是返回值
+}
+export const getNetGraph = params => {
+  return axios({
+    method: 'post',
+    url: `${base}/getNetGraph`,
+    headers: {'Content-Type': 'application/json'},
+    data: params
+  }).then(res => res.data)
+  //  前面方法执行完后才能执行then
+  //  => 前面是参数，后面是返回值
+}
+
+export const getVlan = params => {
+  return axios({
+    method: 'post',
+    url: `${base}/getVlan`,
+    headers: {'Content-Type': 'application/json'},
+    data: params
+  }).then(res => res.data)
+}
 
 export const getRoutingTable = params => {
   return axios({
@@ -62,6 +100,12 @@ export const setAdminStatus = params => {
 }
 
 export const getTraps = params => {
+  return axios({
+    method: 'get',
+    url: `${base}/getTraps`
+  }).then(res => res.data)
+}
+export const getChat = params => {
   return axios({
     method: 'get',
     url: `${base}/getTraps`

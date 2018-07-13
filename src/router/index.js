@@ -6,8 +6,8 @@ import Monitor from '@/pages/Monitor'
 import Interface from '@/pages/Interface'
 import RoutingTable from '@/pages/RoutingTable'
 import System from '@/pages/System'
-import Trap from '@/pages/Trap'
-
+import Vlan from '@/pages/Vlan'
+import Test from '@/pages/Test'
 Vue.use(Router)
 
 // 路由路径配置，主要是path和component的对应
@@ -19,6 +19,11 @@ export default new Router({
       path: '/',
       name: 'Welcome',
       component: Welcome
+    },
+    {
+      path: '/Test',
+      name: 'Test',
+      component: Test
     },
     {
       path: '/devList',
@@ -41,9 +46,9 @@ export default new Router({
       component: System
     },
     {
-      path: '/trap',
-      name: 'Trap',
-      component: Trap
+      path: '/vlan',
+      name: 'Vlan',
+      component: Vlan
     }
   ]
 })

@@ -2,59 +2,73 @@
   <section class="hero">
     <div class="hero-body">
       <div class="container">
+        <navbar :selected = "0"></navbar>
         <div class="columns  is-multiline">
           <div class="column is-10 is-offset-1">
-
-            <h1 class="title is-bold">
+            <h4 class="title is-bold">
               系统名称
-            </h1>
-            <h2 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysName}}
-            </h2>
+            </h4>
             <p></p>
-            <h1 class="title is-bold">
+            <h4 class="title is-bold">
               系统IP
-            </h1>
-            <h2 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{$store.state.selectedIp}}
-            </h2>
+            </h4>
             <p></p>
-            <h1 class="title is-bold">
+            <h4 class="title is-bold">
               联系人
-            </h1>
-            <h2 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysContact}}
-            </h2>
+            </h4>
             <p></p>
-            <h1 class="title is-bold">
+            <h4 v-if="systemInfo.systype==0"  class="title is-bold">
+              CPU
+            </h4>
+            <h4 v-if="systemInfo.systype==0" class="subtitle ">
+              {{systemInfo.sysCPU}}
+            </h4>
+            <p></p>
+            <h4 v-if="systemInfo.systype==0" class="title is-bold">
+              内存
+            </h4>
+            <h4 v-if="systemInfo.systype==0" class="subtitle ">
+              {{systemInfo.sysROM}}
+            </h4>
+            <p></p>
+            <h4 class="title is-bold">
               位置
-            </h1>
-            <h2 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysLocation}}
-            </h2>
+            </h4>
             <p></p>
-            <h1 class="title is-bold">
+            <h4 class="title is-bold">
               SysOID
-            </h1>
-            <h2 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysObjectId}}
-            </h2>
+            </h4>
             <p></p>
-            <h1 class="title is-bold">
+            <h4 class="title is-bold">
               启动时间
-            </h1>
-            <h2 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{timestamp}}
-            </h2>
+            </h4>
             <p></p>
-            <h1 class="title is-bold">
+            <h4 class="title is-bold">
               系统描述
-            </h1>
-            <h2 class="subtitle ">
+            </h4>
+            <h4 class="subtitle ">
               {{systemInfo.sysDescr}}
-            </h2>
+            </h4>
           </div>
-          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -63,27 +77,30 @@
 <script>
 
   import { getInfo } from '../api/api'
-
+  import  navbar  from './Navbar.vue'
   export default {
-    name: 'routingTable',
-    props: ['select'],
+    name: 'system',
+    // 使用组件①写好vue文件②import③在components里注册④使用
+    components:{
+      navbar
+    },
     data () {
       return {
         systemInfo: ''
       }
     },
     mounted () {
-      this.select(3)
       let para = {
         ip: this.$store.state.selectedIp,
-        community: this.$store.state.selectedCommunity
+        readcommunity: this.$store.state.selectedreadCommunity,
+        writecommunity: this.$store.state.selectedwriteCommunity
       }
       getInfo(para).then((res) => {
         this.systemInfo = res
         // 为什么sysUpTime要用value?
         this.systemInfo.sysUpTime = this.systemInfo.sysUpTime.value
       })
-      // 架子啊时间过长可能导致console出错，这里应该是异步加载
+      // 时间过长可能导致console出错，这里应该需要异步加载
     },
     methods : {
       
@@ -105,13 +122,3 @@
 }
 </script>
 
-<style lang="css">
-.down {
-  background-color: #FF3860;
-  width: 10px;
-}
-.up {
-  background-color: #23D160;
-  width: 10px;
-}
-</style>
