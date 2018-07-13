@@ -51,7 +51,6 @@
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"
                            aria-controls="collapseOne">
                             <i class="icon-user-md icon-large"></i> 设备管理</a>
-                        </a>
 
                         <div id="collapseOne" class="panel-collapse collapse " >
                             <ul class="nav nav-list menu-second">
@@ -65,22 +64,12 @@
                     <div class="panel panel-default menu-first">
                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
                            aria-expanded="false" aria-controls="collapseTwo">
-                            <i class="icon-book icon-large"></i> 用户管理</a>
-                        </a>
-                        <div id="collapseTwo" class="panel-collapse collapse">
-                            <ul class="nav nav-list menu-second">
-                                <li><a href="#"><i class="icon-user"></i> 子选项1</a></li>
-                                <li><a href="#"><i class="icon-edit"></i> 子选项2</a></li>
-                                <li><a href="#"><i class="icon-trash"></i> 子选项3</a></li>
-                                <li><a href="#"><i class="icon-list"></i> 子选项4</a></li>
-                            </ul>
-                        </div>
+                          <router-link to = '/graph'><i class="icon-book icon-large"></i> 网络拓扑</a>
                     </div>
                     <div class="panel panel-default menu-first">
                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
                            aria-expanded="false" aria-controls="collapseThree">
                           <router-link to = '/Test'><i class="icon-book icon-large"></i> 其他管理</router-link></a>
-                        </a>
 
                         <div id="collapseThree" class="panel-collapse collapse">
                             <ul class="nav nav-list menu-second">

@@ -36,6 +36,7 @@
                   <th>物理地址</th>
                   <th>MTU</th>
                   <th>设置管理状态</th>
+                  <th>流量监控</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,6 +56,11 @@
                     <button  v-if="i.ifOperStatus === 'DOWN'"  class="btn btn-primary" @click = "open(index)">启用</button>
                     <button     v-if="i.ifOperStatus === 'UP'"  class="btn btn-danger"  @click = "open(index)">禁用</button>
                   </td>
+                  <td>
+                    <!-- 这里我把adminstatus改成了status与1或者2的比较，不知道对不对 -->
+                    <button  class="btn btn-primary" @click = "startFlowInterface(index)">开始监控</button>
+                    <button  class="btn btn-danger"  @click = "stopFlow">停止监控</button>
+                  </td>
 
 
                 </tr>
@@ -68,8 +74,8 @@
                             &times;
                           </button>
                           <h4 class="modal-title" id="myModalLabel">
-          端口状态更改
-        </h4>
+                              端口状态更改
+                          </h4>
                         </div>
                         <div class="modal-body">
                           您确定要{{ interfaces[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].ifDescr}}的端口吗？
@@ -88,7 +94,9 @@
                   </div>
           </div>
           <div>
-
+            <a class="button is-info is-focused level-item" @click="startFlow">开始整体流量监控</a>
+            <a class="button is-info is-focused level-item" @click="stopFlow">停止流量监控</a>
+            <div id="InterfaceFlowAll" style="height:600px;"></div>
           </div>
         </div>
       </div>
@@ -97,14 +105,19 @@
 </template>
 <script>
 // 要用方法必须先import
-import { getInterface, setAdminStatus, updateStatus } from '../api/api'
+import { getInterface, setAdminStatus, updateStatus,getFlow} from '../api/api'
 import navbar from "./Navbar.vue"
 export default {
   name: 'interface',
   // props: ['select'],
   data() {
     return {
+      t,
+      flow:0,
+      echarts : require('echarts'),
+      charts,
       interfaces: ["ok"],
+      flowIndex:-1,
       currentIndex : 0,
       option:{
         tooltip: {
@@ -132,7 +145,6 @@ export default {
             type:'line',
             smooth:true,
             symbol: 'none',
-            sampling: 'average',
             itemStyle: {
               normal: {
                 color: 'rgb(255, 70, 131)'
@@ -149,11 +161,10 @@ export default {
                 }])
               }
             },
-            data: data
+            data: []
           }
         ]
-      }
-
+      },
     }
   },
   components:{
@@ -163,6 +174,7 @@ export default {
     // prop特性也可以是一个方法，这样就不用通过事件传递了？？
     // 还可以这样？？
     // this.select(1)
+    charts=echarts.init(document.getElementById("InterfaceFlowAll"));
     let para = {
       ip: this.$store.state.selectedIp,
       readcommunity: this.$store.state.selectedreadCommunity,
@@ -178,8 +190,33 @@ export default {
 
   },
   methods: {
+    startFlow(){
+      let vm=this;
+      vm.option.series[0].data=[];
+      vm.flowIndex=-1;
+      clearTimeout(t);
+      vm.doGetFlow();
+    },
+    doGetFlow(){
+      let vm=this;
+      getFlow(vm.flowIndex).then((res) => {
+        vm.flow=res;
+        vm.option.series[0].data.push(vm.flow);
+        vm.charts.setOption(vm.option);
+        t=setTimeout("doGetFlow",100);
+      })
+    },
+    stopFlow(){
+        clearTimeout(t)
+    },
+    startFlowInterface(index){
+      this.flowIndex=index;
+      this.option.series[0].data=[];
+      clearTimeout(t);
+      this.doGetFlow();
+    },
     open( index){
-        this.currentIndex = index
+        this.currentIndex = index;
         $('#change').modal('show')
 
     },
@@ -187,13 +224,13 @@ export default {
     setStatus() {
       //参数status表示之前的状态
       // status 表示启用后的状态
-      	let vm = this
-      	var inter = this.interfaces[this.currentIndex]
+      	let vm = this;
+      	var inter = this.interfaces[this.currentIndex];
       	console.log(inter);
-      	var status = inter.ifOperStatus === 'UP' ? 2 : 1
-      	var name = inter.ifDescr
-      	var index = inter.index
-      	console.log("change interfaces")
+      	var status = inter.ifOperStatus === 'UP' ? 2 : 1;
+      	var name = inter.ifDescr;
+      	var index = inter.index;
+      	console.log("change interfaces");
 
       	let para = {
             ip: vm.$store.state.selectedIp,
@@ -201,9 +238,9 @@ export default {
             writecommunity: vm.$store.state.selectedwriteCommunity,
             index,
             status,
-      	}
+      	};
         setAdminStatus(para).then((res) => {
-            console.log(res)
+            console.log(res);
             //this.$toast("change interfaces  in it")
             if (res === true) {
               console.log ("成功改变！");
@@ -213,7 +250,7 @@ export default {
                 ip: vm.$store.state.selectedIp,
                 readcommunity: vm.$store.state.selectedreadCommunity,
                 writecommunity: vm.$store.state.selectedwriteCommunity
-              }
+              };
               // 这里需要自己手动重新获取一次数据
               updateStatus(para).then((res) => {
                 vm.interfaces[vm.currentIndex].ifOperStatus = res[vm.currentIndex]

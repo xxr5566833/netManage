@@ -114,6 +114,12 @@ export const getTraps = params => {
     url: `${base}/getTraps`
   }).then(res => res.data)
 }
+export const getFlow = params => {
+  return axios({
+    method: 'get',
+    url: `${base}/getTraps`
+  }).then(res => res.data)
+}
 export const getChat = params => {
   return axios({
     method: 'get',

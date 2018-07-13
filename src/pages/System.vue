@@ -39,6 +39,10 @@
                   <td>CPU利用率</td>
                   <td>{{systemInfo.sysCpuUsedRate}}%</td>
                 </tr>
+                <tr>
+                  <td>内存利用率</td>
+                  <td>{{systemInfo.sysRomUsedRate}}%</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -77,16 +81,16 @@
       // 时间过长可能导致console出错，这里应该需要异步加载
     },
     methods : {
-      
+
     },
     computed: {
       timestamp () {
-        var date = new Date(this.systemInfo.sysUpTime*10)
-        var day = date.getDate()
-        var hours = date.getHours()
-        var minutes = '0' + date.getMinutes()
-        var seconds = '0' + date.getSeconds()
-        return day-1 + ' days ' + hours + ' hours ' + minutes.substr(-2) + ' minutes ' + seconds.substr(-2) + ' seconds'
+        var date = new Date(this.systemInfo.sysUpTime*10);
+        var day = date.getDate();
+        var hours = date.getHours();
+        var minutes = '0' + date.getMinutes();
+        var seconds = '0' + date.getSeconds();
+        return day-1 + ' days ' + hours + ' hours ' + minutes.substr(-2) + ' minutes ' + seconds.substr(-2) + ' seconds';
       }
 
     },
