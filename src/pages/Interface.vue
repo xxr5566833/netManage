@@ -23,7 +23,7 @@
           </div>
           <div class="column is-10 is-offset-1 ">
             <!-- 如果interfaces是空，那就直接不显示表格 -->
-            <table class="table-bordered table-condensed" style='width:90%' v-if="!(interfaces === '')">
+            <table class="table-bordered table-condensed" style='width:90%;height:600px;' v-if="!(interfaces === '')">
               <thead>
                 <tr>
                   <th>Index</th>
@@ -87,6 +87,9 @@
                     <!-- /.modal -->
                   </div>
           </div>
+          <div>
+
+          </div>
         </div>
       </div>
     </div>
@@ -102,7 +105,55 @@ export default {
   data() {
     return {
       interfaces: ["ok"],
-      currentIndex : 0
+      currentIndex : 0,
+      option:{
+        tooltip: {
+          trigger: 'axis',
+          position: function (pt) {
+            return [pt[0], '10%'];
+          }
+        },
+        title:{
+          left: 'center',
+          text: '设备流量图'
+        },
+        toolbox: {
+          feature: {
+            dataZoom: {
+              yAxisIndex: 'none'
+            },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
+        series: [
+          {
+            name:'总流量',
+            type:'line',
+            smooth:true,
+            symbol: 'none',
+            sampling: 'average',
+            itemStyle: {
+              normal: {
+                color: 'rgb(255, 70, 131)'
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                  offset: 0,
+                  color: 'rgb(255, 158, 68)'
+                }, {
+                  offset: 1,
+                  color: 'rgb(255, 70, 131)'
+                }])
+              }
+            },
+            data: data
+          }
+        ]
+      }
+
     }
   },
   components:{

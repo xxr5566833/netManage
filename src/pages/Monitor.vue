@@ -101,24 +101,20 @@
                     </div>
                       <!-- /.modal -->
             </div>
-          <a class="button is-info is-focused level-item" @click="refreshNetGraph">状态刷新</a>
-            <!-- 这里放置网络拓扑图 -->
-          <div id="NetGraph" style="height:400px;"></div>
           </div>
           </div>
         </div>
-      </div>
+
   </section>
 </template>
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import { updateStatus, getDeviceType, getNetGraph} from '../api/api'
+import { updateStatus, getDeviceType} from '../api/api'
 export default {
   data() {
     return {
-      categoryR:'image://../../static/R.png',
-      categoryS:'image://../../static/S.jpg',
+
       selected: {},
       symbols :[
         "image://../../static/R.png",
@@ -132,99 +128,7 @@ export default {
         writecommunity: '',
         deviceType : ''
       },
-      option : {
-        title: {
-          text: '网络拓扑图'
-        },
-        tooltip: {},
-        animationDurationUpdate: 1500,
-        animationEasingUpdate: 'quinticInOut',
-        series : [
-          {
-            type: 'graph',
-            layout: 'force',
-            draggable: 'true',
-            symbolSize: 50,
-            roam: true,
-            force:{
-              repulsion:400,
-              edgeLength:200,
-            },
-            label: {
-              normal: {
-                show: true
-              }
-            },
-            edgeSymbol: ['circle', 'circle'],
-            edgeSymbolSize: [4, 10],
-            edgeLabel: {
-              normal: {
-                textStyle: {
-                  fontSize: 20
-                }
-              }
-            },
-            categories:[{
-              name:"R",
-              symbol:'image://../../static/R.png'
-            },{
-              name:"S",
-              symbol:'image://../../static/S.jpg'
-            },
-              {
-                name:"PC"
-              }
-            ],
-            lineStyle:{
-              type:'dotted'
-            },
-            data: [{
-              name: '节点1',
-              symbol:"",
-            }, {
-              name: '节点2',
-              category:1,
-              symbol:"",
-            }, {
-              name: '节点3',
-              category:2,
-              symbol:"",
-            }, {
-              name: '节点4',
-              category:0,
-              symbol:"",
-            }],
-            // links: [],
-            links: [ {
-              source: '节点2',
-              target: '节点1',
-            },{
-              source: '节点1',
-              target: '节点2',
-            },
-              {
-              source: '节点1',
-              target: '节点3'
-            }, {
-              source: '节点2',
-              target: '节点3'
-            }, {
-              source: '节点2',
-              target: '节点4'
-            }, {
-              source: '节点1',
-              target: '节点4'
-            }],
-            lineStyle: {
-              normal: {
-                opacity: 0.9,
-                width: 2,
-                curveness: 0
-              }
-            }
-          }
-        ]
-      },
+
       // 存储当前选中的设备的下标（不管是删除还是查看详情）
       currentIndex : 0,
     }
@@ -247,44 +151,7 @@ export default {
     }
   },
   methods: {
-    initChart(){
-        var echarts = require('echarts');
-        var vm=this;
-        this.chart1=echarts.init(document.getElementById("NetGraph"));
-        this.chart1.showLoading();
-        console.log(vm.option);
-        getNetGraph().then((res) => {
-          vm.chart1.hideLoading();
-          vm.option.series[0].data=res.data;
-          console.log( vm.option.series[0].data[0]);
-          for (var i in vm.option.series[0].data){
-            if (vm.option.series[0].data[i].category==0)
-            {
-              //vm.option.series[0].data[i].prototype.symbol=null;
-              vm.option.series[0].data[i].symbol = vm.categoryR;
-            }
-            else if(vm.option.series[0].data[i].category==1)
-            {// vm.option.series[0].data[i].prototype.symbol=null;
-              vm.option.series[0].data[i].symbol = vm.categoryS;}
-          }
-          vm.option.series[0].links=res.link;
-          console.log( vm.option.series[0].data[0]);
-          console.log(vm.option);
-          console.log("graph right");
-          vm.chart1.setOption(vm.option)
-      })
 
-    },
-    refreshNetGraph(){
-      var echarts = require('echarts');
-      var vm=this;
-      /*this.chart1=echarts.init(document.getElementById("NetGraph"));
-      console.log(vm.option);
-      vm.chart1.setOption(vm.option);*/
-      this.$nextTick(() => {
-       this.initChart()
-      })
-    },
     getCurrent(){
       var infos = this.info;
       for(var i in infos){
@@ -439,7 +306,6 @@ export default {
       }
 
       getDeviceType(para).then((res) => {
-        this,refreshNetGraph();
         newRow.deviceType = res;
         console.log(res);
       })
