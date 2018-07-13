@@ -5,6 +5,24 @@ import axios from 'axios'
 // 肯定需要换成8080以外的端口的，具体来说就是换成可以提供数据的服务器的端口
 let base = 'http://localhost:3777'
 
+export const getDisks = params => {
+  return axios({
+    method: 'post',
+    url: `${base}/getDisks`,
+    headers: {'Content-Type': 'application/json'},
+    data: params
+  }).then(res => res.data)
+}
+
+export const getProcesses = params => {
+  return axios({
+    method: 'post',
+    url: `${base}/getProcesses`,
+    headers: {'Content-Type': 'application/json'},
+    data: params
+  }).then(res => res.data)
+}
+
 export const getInterface = params => {
   return axios({
     method: 'post',
@@ -15,14 +33,14 @@ export const getInterface = params => {
   //  前面方法执行完后才能执行then
   //  => 前面是参数，后面是返回值
 }
-export const getNetGrapf = params => {
+/* export const getNetGrapf = params => {
   return axios({
     method: 'get',
     url: `${base}/getInterface`
   }).then(res => res.data)
   //  前面方法执行完后才能执行then
   //  => 前面是参数，后面是返回值
-}
+} */
 
 export const getDeviceType = params => {
   return axios({

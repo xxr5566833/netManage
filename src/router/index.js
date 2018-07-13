@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // @是/src的别名，但是我还没找到在哪个文件中定义的
-import Welcome from '@/pages/Welcome'
+import Graph from '@/pages/Graph'
 import Monitor from '@/pages/Monitor'
 import Interface from '@/pages/Interface'
 import RoutingTable from '@/pages/RoutingTable'
 import System from '@/pages/System'
 import Vlan from '@/pages/Vlan'
 import Test from '@/pages/Test'
+import Disk from '@/pages/Disk'
+import Process from '@/pages/Process'
 Vue.use(Router)
 
 // 路由路径配置，主要是path和component的对应
@@ -17,8 +19,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Welcome',
-      component: Welcome
+      redirect: '/devList'
     },
     {
       path: '/Test',
@@ -26,9 +27,19 @@ export default new Router({
       component: Test
     },
     {
+      path: '/disk',
+      name: 'Disk',
+      component: Disk
+    },
+    {
       path: '/devList',
       name: 'Monitor',
       component: Monitor
+    },
+    {
+      path: '/process',
+      name: 'Process',
+      component: Process
     },
     {
       path: '/interface',
@@ -49,6 +60,11 @@ export default new Router({
       path: '/vlan',
       name: 'Vlan',
       component: Vlan
+    },
+    {
+      path: '/graph',
+      name: 'Graph',
+      component: Graph
     }
   ]
 })
