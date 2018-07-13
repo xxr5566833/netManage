@@ -49,7 +49,7 @@
       initChart(){
         var echarts = require('echarts');
         this.chart1=echarts.init(document.getElementById('mychart'));
-        this.chart1.setOption(this.option)
+        // this.chart1.setOption(this.option)
       },
     }
   }

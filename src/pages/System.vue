@@ -5,68 +5,42 @@
         <navbar :selected = "0"></navbar>
         <div class="columns  is-multiline">
           <div class="column is-10 is-offset-1">
-            <h4 class="title is-bold">
-              系统名称
-            </h4>
-            <h4 class="subtitle ">
-              {{systemInfo.sysName}}
-            </h4>
-            <p></p>
-            <h4 class="title is-bold">
-              系统IP
-            </h4>
-            <h4 class="subtitle ">
-              {{$store.state.selectedIp}}
-            </h4>
-            <p></p>
-            <h4 class="title is-bold">
-              联系人
-            </h4>
-            <h4 class="subtitle ">
-              {{systemInfo.sysContact}}
-            </h4>
-            <p></p>
-            <h4 v-if="systemInfo.systype==0"  class="title is-bold">
-              CPU
-            </h4>
-            <h4 v-if="systemInfo.systype==0" class="subtitle ">
-              {{systemInfo.sysCPU}}
-            </h4>
-            <p></p>
-            <h4 v-if="systemInfo.systype==0" class="title is-bold">
-              内存
-            </h4>
-            <h4 v-if="systemInfo.systype==0" class="subtitle ">
-              {{systemInfo.sysROM}}
-            </h4>
-            <p></p>
-            <h4 class="title is-bold">
-              位置
-            </h4>
-            <h4 class="subtitle ">
-              {{systemInfo.sysLocation}}
-            </h4>
-            <p></p>
-            <h4 class="title is-bold">
-              SysOID
-            </h4>
-            <h4 class="subtitle ">
-              {{systemInfo.sysObjectId}}
-            </h4>
-            <p></p>
-            <h4 class="title is-bold">
-              启动时间
-            </h4>
-            <h4 class="subtitle ">
-              {{timestamp}}
-            </h4>
-            <p></p>
-            <h4 class="title is-bold">
-              系统描述
-            </h4>
-            <h4 class="subtitle ">
-              {{systemInfo.sysDescr}}
-            </h4>
+            <table class="table is-bordered" v-if="!(systemInfo === '')">
+              <tbody>
+                <tr >
+                  <td>系统名称</td>
+                  <td>{{systemInfo.sysName}}</td>
+                </tr>
+                <tr >
+                  <td>系统IP</td>
+                  <td>{{$store.state.selectedIp}}</td>
+                </tr>
+                <tr >
+                  <td>联系人</td>
+                  <td>{{systemInfo.sysContact}}</td>
+                </tr>
+                <tr >
+                  <td>位置</td>
+                  <td>{{systemInfo.sysLocation}}</td>
+                </tr>
+                <tr >
+                  <td>SysOID</td>
+                  <td>{{systemInfo.sysObjectId}}</td>
+                </tr>
+                <tr >
+                  <td>启动时间</td>
+                  <td>{{timestamp}}</td>
+                </tr>
+                <tr >
+                  <td>系统描述</td>
+                  <td>{{systemInfo.sysDescr}}</td>
+                </tr>
+                <tr>
+                  <td>CPU利用率</td>
+                  <td>{{systemInfo.sysCpuUsedRate}}%</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

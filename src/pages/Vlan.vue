@@ -182,15 +182,3 @@ export default {
 }
 
 </script>
-<style lang="css" scoped>
-.down {
-  background-color: #FF3860;
-  width: 10px;
-}
-
-.up {
-  background-color: #23D160;
-  width: 10px;
-}
-
-</style>

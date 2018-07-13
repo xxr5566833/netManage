@@ -8,6 +8,8 @@ import RoutingTable from '@/pages/RoutingTable'
 import System from '@/pages/System'
 import Vlan from '@/pages/Vlan'
 import Test from '@/pages/Test'
+import Disk from '@/pages/Disk'
+import Process from '@/pages/Process'
 Vue.use(Router)
 
 // 路由路径配置，主要是path和component的对应
@@ -26,9 +28,19 @@ export default new Router({
       component: Test
     },
     {
+      path: '/disk',
+      name: 'Disk',
+      component: Disk
+    },
+    {
       path: '/devList',
       name: 'Monitor',
       component: Monitor
+    },
+    {
+      path: '/process',
+      name: 'Process',
+      component: Process
     },
     {
       path: '/interface',

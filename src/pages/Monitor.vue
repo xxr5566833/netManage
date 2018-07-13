@@ -111,21 +111,15 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-<<<<<<< HEAD
-import { updateStatus , getDeviceType } from '../api/api'
-=======
+
 import { updateStatus, getDeviceType, getNetGraph} from '../api/api'
->>>>>>> 97bb59dcc6e97a7d17e51e4c2b98d8377169cbbb
+
 export default {
   data() {
     return {
       categoryR:'image://../../static/R.png',
       categoryS:'image://../../static/S.jpg',
       selected: {},
-      symbols :[
-        "image://../../static/R.png",
-        "image://../../static/S.jpg"
-      ],
       // index 默认从1开始
       dev: {
         name: '',
