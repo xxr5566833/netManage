@@ -12,16 +12,10 @@
             <h2 class="subtitle ">
               {{$store.state.selectedIp}}
             </h2>
-            <div class="columns is-multiline">
-              <div class="column is-2" v-for="i in vlans">
-                <div class="tag is-success is-medium" v-if="i.status === 'UP'">{{i.ifDescr}}</div>
-                <div class="tag is-danger is-medium" v-if="i.status === 'DOWN'">{{i.ifDescr}}</div>
-              </div>
-            </div>
           </div>
-          <div class="column is-10 is-offset-1 ">
+          <div class="column is-10 is-offset-1 " v-if="!(vlans === '')">
             <!-- 如果interfaces是空，那就直接不显示表格 -->
-            <table class="table-bordered table-condensed" style='width:90%' v-if="!(vlans === '')">
+            <table class="table-bordered table-condensed" style='width:90%' >
               <thead>
                 <tr>
                   <th>Index</th>
@@ -87,6 +81,9 @@
                     <!-- /.modal -->
                   </div>
           </div>
+          <div v-else>
+            <h2>没有VLAN信息</h2>
+          </div>
         </div>
       </div>
     </div>
@@ -101,7 +98,7 @@ export default {
   // props: ['select'],
   data() {
     return {
-      vlans: ["ok"],
+      vlans: '',
       // 表示当前被选中的vlan的在数组中的下标与vlan自身的index区分开
       currentIndex : 0
     }
@@ -112,14 +109,17 @@ export default {
   mounted() {
     // prop特性也可以是一个方法，这样就不用通过事件传递了？？
     // this.select(1)
+    console.log(this.vlans);
     let para = {
       ip: this.$store.state.selectedIp,
       readcommunity: this.$store.state.selectedreadCommunity,
       writecommunity: this.$store.state.selectedwriteCommunity
     }
     getVlan(para).then((res) => {
-      // 直接更新interfaces
-      this.vlans = res
+      if(res.length != 0)
+        this.vlans = res
+      console.log(this.vlans)
+      console.log(this.vlans === '');
     })
 
   },
