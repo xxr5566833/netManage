@@ -11,6 +11,7 @@ import Test from '@/pages/Test'
 import Disk from '@/pages/Disk'
 import Process from '@/pages/Process'
 import TranslationTable from '@/pages/TranslationTable'
+import TCPConnect from '@/pages/TCPConnect'
 Vue.use(Router)
 
 // 路由路径配置，主要是path和component的对应
