@@ -64,7 +64,7 @@
                     <div class="panel panel-default menu-first">
                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
                            aria-expanded="false" aria-controls="collapseTwo">
-                          <router-link to = '/graph'><i class="icon-book icon-large"></i> 网络拓扑</a>
+                          <router-link to = '/graph'><i class="icon-book icon-large"></i> 网络拓扑</router-link></a>
                     </div>
                     <div class="panel panel-default menu-first">
                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
