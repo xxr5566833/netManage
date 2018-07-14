@@ -122,7 +122,7 @@
           vm.chart1.hideLoading();
           var i=0;
           var t;
-          console.log( vm.option.series[0].data[0]);
+          console.log( res);
           for (var i in vm.option.series[0].data){
             if (vm.option.series[0].data[i].category==0)
             {
