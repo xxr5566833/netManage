@@ -32,7 +32,7 @@
                           <input class="form-control" type="text" placeholder="public" v-model='dev.readcommunity'> </div>
                         <div class="form-group">
                           <label for="">writeCommunity</label>
-                          <input class="form-control" type="text" placeholder="public" v-model='dev.writecommunity'> </div>
+                          <input class="form-control" type="text" placeholder="private" v-model='dev.writecommunity'> </div>
                         <div class="text-right">
                           <button class="btn btn-primary" type="submit" @click='prompt()' data-dismiss="modal">添加</button>
                           <button class="btn btn-danger" data-dismiss="modal">取消</button>

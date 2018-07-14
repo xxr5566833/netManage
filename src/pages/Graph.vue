@@ -147,7 +147,7 @@
                 vm.chart1.setOption(vm.option);
                 vm.i++;
               }else
-                clearTimeout(vm.t);
+                clearInterval(vm.t);
             }
           }, 1000);
         })

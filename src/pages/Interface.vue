@@ -151,78 +151,58 @@ export default {
       let vm=this;
       var echarts = require('echarts');
       var charts=echarts.init(document.getElementById("InterfaceFlowAll"));
-      var option={
-        tooltip: {
-          trigger: 'axis',
-          position: function (pt) {
-            return [pt[0], '10%'];
-          }
+      var option = {
+        title: {
+          text: '流量图',
         },
-        title:{
-          left: 'center',
-          text: '设备流量图'
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data:['入流量']
         },
         toolbox: {
+          show: true,
           feature: {
             dataZoom: {
               yAxisIndex: 'none'
             },
+            dataView: {readOnly: false},
+            magicType: {type: ['line', 'bar']},
             restore: {},
             saveAsImage: {}
+          }
+        },
+        xAxis:  {
+          type: 'category',
+          axisLabel: {
+            formatter: '{value} 0s'
+          }
+        },
+        yAxis: {
+          type: 'category',
+          axisLabel: {
+            formatter: '{value} MB'
           }
         },
         series: [
           {
             name:'入流量',
             type:'line',
-            smooth:true,
-            symbol: 'none',
-            itemStyle: {
-              normal: {
-                color: 'rgb(255, 70, 131)'
-              }
-            },
-            areaStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: 'rgb(255, 158, 68)'
-                }, {
-                  offset: 1,
-                  color: 'rgb(255, 70, 131)'
-                }])
-              }
-            },
-            data: []
+            data:[],
           },
-          /*{
+         /* {
             name:'出流量',
             type:'line',
-            smooth:true,
-            symbol: 'none',
-            itemStyle: {
-              normal: {
-                color: 'rgb(135, 206, 250)'
-              }
-            },
-            areaStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: 'rgb(255, 158, 68)'
-                }, {
-                  offset: 1,
-                  color: 'rgb(255, 70, 131)'
-                }])
-              }
-            },
-            data: []
+            data:[],
           }*/
         ]
       };
-      clearTimeout(vm.t);
+      charts.setOption(option);
+      clearInterval(window.intervalObj);
       console.log("获取了流量ing");
-      vm.t=setInterval(() => {
+      var timetime=0;
+      window.intervalObj=setInterval(() => {
         let para = {
           ip: vm.$store.state.selectedIp,
           readcommunity: vm.$store.state.selectedreadCommunity,
@@ -230,19 +210,21 @@ export default {
           index:vm.flowIndex,
         };
         getFlow(para).then((res) => {
-          vm.inFlow=res.inBound;
-          vm.outFlow=res.outBound;
+          vm.inFlow=[timetime,res.inBound.toFixed(0)];
+          /*vm.outFlow=[timetime,res.outBound.toFixed(2)];*/
           console.log("获取了一次");
           console.log(res);
-          console.log(option.series[0].data);
+          timetime++;
           option.series[0].data.push(vm.inFlow);
-          option.series[1].data.push(vm.outFlow);
+         /* option.series[1].data.push(vm.outFlow);*/
           charts.setOption(option);
         })
-      }, 500);
+      }, 10000);
     },
     stopFlow(){
-       clearInterval(vm.t)
+      this.$nextTick(() => {
+        clearInterval(window.intervalObj)
+      })
     },
     startAllFlow(){
       this.flowIndex=-1;
