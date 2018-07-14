@@ -26,6 +26,8 @@
         ip:'127.0.0.1',
         foundDevice:'',
         i:0,
+        t:setTimeout(" ",100),
+        dataIn:[],
         categoryR:'image://../../static/R.png',
         categoryS:'image://../../static/S.jpg',
         option : {
@@ -120,42 +122,41 @@
         var vm=this;
         this.chart1=echarts.init(document.getElementById("NetGraph"));
         this.chart1.showLoading();
-        console.log(vm.option);
         getNetGraph(vm.ip).then((res) => {
+          // 直接更新interfaces
           vm.chart1.hideLoading();
-          var t;
           vm.i=0;
-          console.log( vm.option.series[0].data[0]);
+          vm.dataIn=res.data;
+          console.log(vm.dataIn);
           vm.option.series[0].links=res.link;
-          function f() {
-            if(vm.i<res.data.length)
+          vm.t= setInterval(() => {
             {
-              vm.i++;
-              vm.option.series[0].data.push(res.data[vm.i]);
-              if (vm.option.series[0].data[vm.i].category==0)
+              if(vm.i<vm.dataIn.length)
               {
+                vm.option.series[0].data.push(vm.dataIn[vm.i]);
+                console.log(vm.option.series[0].data);
+                if (vm.option.series[0].data[vm.i].category==0)
+                {
                   //vm.option.series[0].data[i].prototype.symbol=null;
-                vm.option.series[0].data[vm.i].symbol = vm.categoryR;
-              }
-              else if(vm.option.series[0].data[vm.i].category==1)
-              {// vm.option.series[0].data[i].prototype.symbol=null;
-                vm.option.series[0].data[vm.i].symbol = vm.categoryS;}
-              vm.foundDevice=vm.foundDevice+"拓扑发现了名为"+res.data[vm.i].name+"的设备\n";
-              vm.chart1.setOption(vm.option);
-              t=setTimeout("f",1000);
-            }else
-              clearTimeout(t);
-          };
-          f();
-          console.log( vm.option.series[0].data[0]);
-          console.log(vm.option);
-          console.log("graph right");
+                  vm.option.series[0].data[vm.i].symbol = vm.categoryR;
+                }
+                else if(vm.option.series[0].data[vm.i].category==1)
+                {// vm.option.series[0].data[i].prototype.symbol=null;
+                  vm.option.series[0].data[vm.i].symbol = vm.categoryS;}
+                vm.foundDevice=vm.foundDevice+"拓扑发现了名为"+vm.dataIn[vm.i].name+"的设备\n";
+                vm.chart1.setOption(vm.option);
+                vm.i++;
+              }else
+                clearTimeout(vm.t);
+            }
+          }, 1000);
         })
-
+          console.log("graph right");
       },
       refreshNetGraph(){
         var echarts = require('echarts');
         var vm=this;
+        vm.option.series[0].data=[];
         /*this.chart1=echarts.init(document.getElementById("NetGraph"));
         console.log(vm.option);
         vm.chart1.setOption(vm.option);*/
