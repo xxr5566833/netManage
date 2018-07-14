@@ -13,16 +13,16 @@
               {{$store.state.selectedIp}}
             </h2>
           </div>
-          <div class="column is-10 is-offset-1 ">
+          <div class="column is-10 is-offset-1 " v-if="!(processes === '')">
             <!-- 如果interfaces是空，那就直接不显示表格 -->
-            <table class="table-bordered table-condensed" style='width:90%' v-if="!(processes === '')">
+            <table class="table-bordered table-condensed" style='width:90%' >
               <thead>
                 <tr>
                   <th>Index</th>
                   <th>名称</th>
                   <th>进程类型</th>
                   <th>进程运行状态</th>
-                
+
                 </tr>
               </thead>
               <tbody>
@@ -36,7 +36,10 @@
                 </tr>
               </tbody>
             </table>
-            
+
+          </div>
+          <div v-else>
+              <h2>没有进程信息</h2>
           </div>
         </div>
       </div>
@@ -78,7 +81,7 @@ export default {
 
   },
   methods: {
-  
+
 
   }
 }

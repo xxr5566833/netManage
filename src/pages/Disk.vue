@@ -13,9 +13,9 @@
               {{$store.state.selectedIp}}
             </h2>
           </div>
-          <div class="column is-10 is-offset-1 ">
+          <div class="column is-10 is-offset-1 " v-if="!(disks === '')">
             <!-- 如果interfaces是空，那就直接不显示表格 -->
-            <table class="table-bordered table-condensed" style='width:90%' v-if="!(disks === '')">
+            <table class="table-bordered table-condensed" style='width:90%' >
               <thead>
                 <tr>
                   <th>Index</th>
@@ -36,6 +36,9 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+          <div v-else>
+            <h2>没有硬盘信息</h2>
           </div>
         </div>
       </div>
