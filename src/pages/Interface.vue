@@ -3,7 +3,6 @@
     <div class="hero-body">
       <div class="container">
       	<navbar :selected = "1"></navbar>
-
         <div class="columns  is-multiline">
           <div class="column is-10 is-offset-1">
             <h1 class="title is-bold">
@@ -21,9 +20,9 @@
               </div>
             </div>
           </div>
-          <div class="column is-10 is-offset-1 ">
+          <div class="column is-10 is-offset-1 " style="overflow-x: auto; overflow-y: auto; height: 300px; width:90%;">
             <!-- 如果interfaces是空，那就直接不显示表格 -->
-            <table class="table-bordered table-condensed" style='width:90%;height:600px;' v-if="!(interfaces === '')">
+            <table class="table-bordered table-condensed"  v-if="!(interfaces === '')">
               <thead>
                 <tr>
                   <th>Index</th>
@@ -94,7 +93,7 @@
                   </div>
           </div>
           <div>
-            <a class="button is-info is-focused level-item" @click="startFlow">开始整体流量监控</a>
+            <a class="button is-info is-focused level-item" @click="startAllFlow">开始整体流量监控</a>
             <a class="button is-info is-focused level-item" @click="stopFlow">停止流量监控</a>
             <div id="InterfaceFlowAll" style="height:600px;"></div>
           </div>
@@ -112,14 +111,43 @@ export default {
   // props: ['select'],
   data() {
     return {
-      t,
-      flow:0,
-      echarts : require('echarts'),
-      charts,
+      t:'',
+      inFlow:0,
+      outFlow:0,
       interfaces: ["ok"],
       flowIndex:-1,
       currentIndex : 0,
-      option:{
+    }
+  },
+  components:{
+  	navbar
+  },
+  mounted() {
+    // prop特性也可以是一个方法，这样就不用通过事件传递了？？
+    // 还可以这样？？
+    // this.select(1)
+
+
+    let para = {
+      ip: this.$store.state.selectedIp,
+      readcommunity: this.$store.state.selectedreadCommunity,
+      writecommunity: this.$store.state.selectedwriteCommunity
+    }
+    getInterface(para).then((res) => {
+      // 直接更新interfaces
+      this.interfaces = res
+    })
+
+  },
+  computed: {
+
+  },
+  methods: {
+    startFlow(){
+      let vm=this;
+      var echarts = require('echarts');
+      var charts=echarts.init(document.getElementById("InterfaceFlowAll"));
+      var option={
         tooltip: {
           trigger: 'axis',
           position: function (pt) {
@@ -141,7 +169,7 @@ export default {
         },
         series: [
           {
-            name:'总流量',
+            name:'入流量',
             type:'line',
             smooth:true,
             symbol: 'none',
@@ -162,58 +190,69 @@ export default {
               }
             },
             data: []
-          }
+          },
+          /*{
+            name:'出流量',
+            type:'line',
+            smooth:true,
+            symbol: 'none',
+            itemStyle: {
+              normal: {
+                color: 'rgb(135, 206, 250)'
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                  offset: 0,
+                  color: 'rgb(255, 158, 68)'
+                }, {
+                  offset: 1,
+                  color: 'rgb(255, 70, 131)'
+                }])
+              }
+            },
+            data: []
+          }*/
         ]
-      },
-    }
-  },
-  components:{
-  	navbar
-  },
-  mounted() {
-    // prop特性也可以是一个方法，这样就不用通过事件传递了？？
-    // 还可以这样？？
-    // this.select(1)
-    charts=echarts.init(document.getElementById("InterfaceFlowAll"));
-    let para = {
-      ip: this.$store.state.selectedIp,
-      readcommunity: this.$store.state.selectedreadCommunity,
-      writecommunity: this.$store.state.selectedwriteCommunity
-    }
-    getInterface(para).then((res) => {
-      // 直接更新interfaces
-      this.interfaces = res
-    })
-
-  },
-  computed: {
-
-  },
-  methods: {
-    startFlow(){
-      let vm=this;
-      vm.option.series[0].data=[];
-      vm.flowIndex=-1;
-      clearTimeout(t);
-      vm.doGetFlow();
+      };
+      clearTimeout(vm.t);
+      console.log("获取了流量ing");
+      vm.doGetFlow(vm,option,charts);
     },
-    doGetFlow(){
-      let vm=this;
-      getFlow(vm.flowIndex).then((res) => {
-        vm.flow=res;
-        vm.option.series[0].data.push(vm.flow);
-        vm.charts.setOption(vm.option);
-        t=setTimeout("doGetFlow",100);
+    doGetFlow(vm,option,charts){
+      let para = {
+        ip: vm.$store.state.selectedIp,
+        readcommunity: vm.$store.state.selectedreadCommunity,
+        writecommunity: vm.$store.state.selectedwriteCommunity,
+        index:vm.flowIndex,
+      };
+      getFlow(para).then((res) => {
+        vm.inFlow=res.inBound;
+        //vm.outFlow=res.outBound;
+        console.log("获取了一次");
+        console.log(res);
+        console.log(option.series[0].data);
+        option.series[0].data.push(vm.inFlow);
+        //option.series[1].data.push(vm.outFlow);
+        charts.setOption(option);
+       // vm.t=setTimeout("vm.doGetFlow",1000);
       })
     },
     stopFlow(){
-        clearTimeout(t)
+        clearTimeout(vm.t)
+    },
+    startAllFlow(){
+      this.flowIndex=-1;
+      this.$nextTick(() => {
+        this.startFlow();
+      })
     },
     startFlowInterface(index){
       this.flowIndex=index;
-      this.option.series[0].data=[];
-      clearTimeout(t);
-      this.doGetFlow();
+      this.$nextTick(() => {
+        this.startFlow();
+      })
     },
     open( index){
         this.currentIndex = index;

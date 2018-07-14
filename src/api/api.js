@@ -116,8 +116,10 @@ export const getTraps = params => {
 }
 export const getFlow = params => {
   return axios({
-    method: 'get',
-    url: `${base}/getTraps`
+    method: 'post',
+    url: `${base}/getFlow`,
+    headers: {'Content-Type': 'application/json'},
+    data: params
   }).then(res => res.data)
 }
 export const getChat = params => {

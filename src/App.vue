@@ -50,16 +50,7 @@
                     <div class="panel panel-default menu-first">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"
                            aria-controls="collapseOne">
-                            <i class="icon-user-md icon-large"></i> 设备管理</a>
-
-                        <div id="collapseOne" class="panel-collapse collapse " >
-                            <ul class="nav nav-list menu-second">
-                                <li><router-link to = '/devList'><i class="icon-wrench"></i>设备总览</router-link></li>
-                                <!-- <li :class = "selectMenu[3].style" @click="select(3)"><router-link to = '/system'><i class="icon-edit"></i> 设备信息</router-link></li>
-                                <li :class = "selectMenu[1].style" @click = "select(1)"><router-link to = '/interface'><i class="icon-edit"></i> 端口列表</router-link></li>
-                                <li :class = "selectMenu[2].style" @click = "select(2)"><router-link to = "/routingTable"><i class="icon-list"></i> 路由表</router-link></li> -->
-                            </ul>
-                        </div>
+                          <router-link to = '/devList'><i class="icon-user-md icon-large"></i> 设备管理</router-link></a>
                     </div>
                     <div class="panel panel-default menu-first">
                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
