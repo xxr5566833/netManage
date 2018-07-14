@@ -142,6 +142,10 @@ export default {
   computed: {
 
   },
+  beforeCreate:
+    function(){
+      window.intervalObj="";
+    },
   methods: {
     startFlow(){
       let vm=this;
@@ -218,29 +222,27 @@ export default {
       };
       clearTimeout(vm.t);
       console.log("获取了流量ing");
-      vm.doGetFlow(vm,option,charts);
-    },
-    doGetFlow(vm,option,charts){
-      let para = {
-        ip: vm.$store.state.selectedIp,
-        readcommunity: vm.$store.state.selectedreadCommunity,
-        writecommunity: vm.$store.state.selectedwriteCommunity,
-        index:vm.flowIndex,
-      };
-      getFlow(para).then((res) => {
-        vm.inFlow=res.inBound;
-        //vm.outFlow=res.outBound;
-        console.log("获取了一次");
-        console.log(res);
-        console.log(option.series[0].data);
-        option.series[0].data.push(vm.inFlow);
-        //option.series[1].data.push(vm.outFlow);
-        charts.setOption(option);
-       // vm.t=setTimeout("vm.doGetFlow",1000);
-      })
+      vm.t=setInterval(() => {
+        let para = {
+          ip: vm.$store.state.selectedIp,
+          readcommunity: vm.$store.state.selectedreadCommunity,
+          writecommunity: vm.$store.state.selectedwriteCommunity,
+          index:vm.flowIndex,
+        };
+        getFlow(para).then((res) => {
+          vm.inFlow=res.inBound;
+          vm.outFlow=res.outBound;
+          console.log("获取了一次");
+          console.log(res);
+          console.log(option.series[0].data);
+          option.series[0].data.push(vm.inFlow);
+          option.series[1].data.push(vm.outFlow);
+          charts.setOption(option);
+        })
+      }, 500);
     },
     stopFlow(){
-        clearTimeout(vm.t)
+       clearInterval(vm.t)
     },
     startAllFlow(){
       this.flowIndex=-1;
