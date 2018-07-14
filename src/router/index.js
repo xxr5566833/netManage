@@ -10,7 +10,7 @@ import Vlan from '@/pages/Vlan'
 import Test from '@/pages/Test'
 import Disk from '@/pages/Disk'
 import Process from '@/pages/Process'
-import TCPConnect from '@/pages/TCPConnect'
+import TranslationTable from '@/pages/TranslationTable'
 Vue.use(Router)
 
 // 路由路径配置，主要是path和component的对应
@@ -31,6 +31,11 @@ export default new Router({
       path: '/disk',
       name: 'Disk',
       component: Disk
+    },
+    {
+      path: '/translationTable',
+      name: 'translation',
+      component: TranslationTable
     },
     {
       path: '/devList',

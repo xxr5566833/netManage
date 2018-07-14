@@ -14,6 +14,15 @@ export const getDisks = params => {
   }).then(res => res.data)
 }
 
+export const getTranslationTable = params => {
+  return axios({
+    method: 'post',
+    url: `${base}/getTranslationTable`,
+    headers: {'Content-Type': 'application/json'},
+    data: params
+  }).then(res => res.data)
+}
+
 export const getProcesses = params => {
   return axios({
     method: 'post',
