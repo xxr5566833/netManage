@@ -125,21 +125,7 @@
           vm.chart1.hideLoading();
           var i=0;
           var t;
-<<<<<<< HEAD
-          console.log( res);
-          for (var i in vm.option.series[0].data){
-            if (vm.option.series[0].data[i].category==0)
-            {
-              //vm.option.series[0].data[i].prototype.symbol=null;
-              vm.option.series[0].data[i].symbol = vm.categoryR;
-            }
-            else if(vm.option.series[0].data[i].category==1)
-            {// vm.option.series[0].data[i].prototype.symbol=null;
-              vm.option.series[0].data[i].symbol = vm.categoryS;}
-          }
-=======
           console.log( vm.option.series[0].data[0]);
->>>>>>> 81d3f269bd5c7ab20b31ae21286352fc15f0dd66
           vm.option.series[0].links=res.link;
           function f() {
             if(i<res.data.length)
