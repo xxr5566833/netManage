@@ -39,10 +39,6 @@
                   <td>CPU利用率</td>
                   <td>{{systemInfo.sysCpuUsedRate}}%</td>
                 </tr>
-                <tr>
-                  <td>内存利用率</td>
-                  <td>{{systemInfo.sysRomUsedRate}}%</td>
-                </tr>
               </tbody>
             </table>
           </div>

@@ -33,11 +33,9 @@
                   <td>{{i.storageUnits}}</td>
                   <td>{{i.usedRate}}</td>
                   <td>{{i.totalSize}}</td>
-
                 </tr>
               </tbody>
             </table>
-            
           </div>
         </div>
       </div>
@@ -79,7 +77,7 @@ export default {
 
   },
   methods: {
-  
+
 
   }
 }

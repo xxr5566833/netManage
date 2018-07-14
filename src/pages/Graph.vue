@@ -2,12 +2,15 @@
   <section class="hero">
     <div class="hero-body">
       <div class="container">
+        <a>
+          请输入拓扑起点IP（温馨提示：本拓扑发现不支持没有路由器的系统）
         <input type="text" v-model="ip">
-        <textarea style="height:200px;" v-model="foundDevice"></textarea>
-        <a class="button is-info is-focused level-item" @click="refreshNetGraph">拓扑图发现</a>
-        <!-- 这里放置网络拓扑图 -->
-        <div id="NetGraph" style="height:800px;"></div>
+        </a>
         </div>
+      <div><textarea style="width:800px;height:200px;" v-model="foundDevice"></textarea></div>
+      <div><a class="button is-info is-focused level-item" @click="refreshNetGraph">请点击开始拓扑图发现</a>
+        <!-- 这里放置网络拓扑图 -->
+        <div id="NetGraph" style="height:800px;"></div></div>
       </div>
   </section>
 </template>
@@ -20,7 +23,7 @@
     // props: ['select'],
     data () {
       return {
-        ip:'127.0.0.0',
+        ip:'127.0.0.1',
         foundDevice:'',
         categoryR:'image://../../static/R.png',
         categoryS:'image://../../static/S.jpg',
@@ -123,22 +126,22 @@
           var i=0;
           var t;
           console.log( vm.option.series[0].data[0]);
-          for (var i in vm.option.series[0].data){
-            if (vm.option.series[0].data[i].category==0)
-            {
-              //vm.option.series[0].data[i].prototype.symbol=null;
-              vm.option.series[0].data[i].symbol = vm.categoryR;
-            }
-            else if(vm.option.series[0].data[i].category==1)
-            {// vm.option.series[0].data[i].prototype.symbol=null;
-              vm.option.series[0].data[i].symbol = vm.categoryS;}
-          }
           vm.option.series[0].links=res.link;
           function f() {
             if(i<res.data.length)
             {
               i++;
               vm.option.series[0].data.push(res.data[i]);
+              for (var i in vm.option.series[0].data){
+                if (vm.option.series[0].data[i].category==0)
+                {
+                  //vm.option.series[0].data[i].prototype.symbol=null;
+                  vm.option.series[0].data[i].symbol = vm.categoryR;
+                }
+                else if(vm.option.series[0].data[i].category==1)
+                {// vm.option.series[0].data[i].prototype.symbol=null;
+                  vm.option.series[0].data[i].symbol = vm.categoryS;}
+              }
               vm.foundDevice=vm.foundDevice+"拓扑发现了名为"+res.data[i].name+"的设备\n";
               vm.chart1.setOption(vm.option);
               t=setTimeout("f",1000);
