@@ -10,6 +10,7 @@ import Vlan from '@/pages/Vlan'
 import Test from '@/pages/Test'
 import Disk from '@/pages/Disk'
 import Process from '@/pages/Process'
+import TCPConnect from '@/pages/TCPConnect'
 Vue.use(Router)
 
 // 路由路径配置，主要是path和component的对应
@@ -60,6 +61,11 @@ export default new Router({
       path: '/vlan',
       name: 'Vlan',
       component: Vlan
+    },
+    {
+      path: '/TCPConnect',
+      name: 'TCPConnect',
+      component: TCPConnect
     },
     {
       path: '/graph',

@@ -41,12 +41,6 @@
             <div class="col-xs-2 bg-blue">
                 <br/>
                 <div class="panel-group sidebar-menu" id="accordion" aria-multiselectable="true">
-                    <div class="panel panel-default menu-first menu-first-active">
-                        <a data-toggle="collapse" data-parent="#accordion" href="index.html" aria-expanded="true"
-                           aria-controls="collapseOne">
-                            <i class="icon-home icon-large"></i> 主页
-                        </a>
-                    </div>
                     <div class="panel panel-default menu-first">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"
                            aria-controls="collapseOne">
@@ -60,16 +54,7 @@
                     <div class="panel panel-default menu-first">
                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
                            aria-expanded="false" aria-controls="collapseThree">
-                          <router-link to = '/Test'><i class="icon-book icon-large"></i> 其他管理</router-link></a>
-
-                        <div id="collapseThree" class="panel-collapse collapse">
-                            <ul class="nav nav-list menu-second">
-                                <li><a href="#"><i class="icon-user"></i> 子选项1</a></li>
-                                <li><a href="#"><i class="icon-edit"></i> 子选项2</a></li>
-                                <li><a href="#"><i class="icon-trash"></i> 子选项3</a></li>
-                                <li><a href="#"><i class="icon-list"></i> 子选项4</a></li>
-                            </ul>
-                        </div>
+                          <router-link to = '/TCPConnect'><i class="icon-book icon-large"></i> TCP管理</router-link></a>
                     </div>
                 </div>
             </div>

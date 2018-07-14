@@ -7,8 +7,8 @@
         <input type="text" v-model="ip">
         </a>
         </div>
-      <div><textarea style="width:800px;height:200px;" v-model="foundDevice"></textarea></div>
-      <div><a class="button is-info is-focused level-item" @click="refreshNetGraph">请点击开始拓扑图发现</a>
+      <div><textarea style="width:80%;height:200px;" v-model="foundDevice"></textarea></div>
+      <div><button class="btn btn-primary" @click="refreshNetGraph">开始拓扑发现</button>
         <!-- 这里放置网络拓扑图 -->
         <div id="NetGraph" style="height:800px;"></div></div>
       </div>
@@ -26,7 +26,6 @@
         ip:'127.0.0.1',
         foundDevice:'',
         i:0,
-        t:setTimeout(" ",100),
         dataIn:[],
         categoryR:'image://../../static/R.png',
         categoryS:'image://../../static/S.jpg',
@@ -113,6 +112,10 @@
     },
     mounted() {
     },
+    beforeCreate:
+      function(){
+        window.intervalObc="";
+      },
     computed: {
 
     },
@@ -129,7 +132,7 @@
           vm.dataIn=res.data;
           console.log(vm.dataIn);
           vm.option.series[0].links=res.link;
-          vm.t= setInterval(() => {
+          window.intervalObc= setInterval(() => {
             {
               if(vm.i<vm.dataIn.length)
               {
@@ -147,7 +150,7 @@
                 vm.chart1.setOption(vm.option);
                 vm.i++;
               }else
-                clearInterval(vm.t);
+                clearInterval(window.intervalObc);
             }
           }, 1000);
         })
