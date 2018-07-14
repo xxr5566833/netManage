@@ -25,6 +25,7 @@
       return {
         ip:'127.0.0.1',
         foundDevice:'',
+        i:0,
         categoryR:'image://../../static/R.png',
         categoryS:'image://../../static/S.jpg',
         option : {
@@ -120,49 +121,30 @@
         this.chart1=echarts.init(document.getElementById("NetGraph"));
         this.chart1.showLoading();
         console.log(vm.option);
-
         getNetGraph(vm.ip).then((res) => {
           vm.chart1.hideLoading();
-          var i=0;
           var t;
-<<<<<<< HEAD
-          console.log( res);
-          for (var i in vm.option.series[0].data){
-            if (vm.option.series[0].data[i].category==0)
-            {
-              //vm.option.series[0].data[i].prototype.symbol=null;
-              vm.option.series[0].data[i].symbol = vm.categoryR;
-            }
-            else if(vm.option.series[0].data[i].category==1)
-            {// vm.option.series[0].data[i].prototype.symbol=null;
-              vm.option.series[0].data[i].symbol = vm.categoryS;}
-          }
-=======
+          vm.i=0;
           console.log( vm.option.series[0].data[0]);
->>>>>>> 81d3f269bd5c7ab20b31ae21286352fc15f0dd66
           vm.option.series[0].links=res.link;
           function f() {
-            if(i<res.data.length)
+            if(vm.i<res.data.length)
             {
-              i++;
-              vm.option.series[0].data.push(res.data[i]);
-              for (var i in vm.option.series[0].data){
-                if (vm.option.series[0].data[i].category==0)
-                {
+              vm.i++;
+              vm.option.series[0].data.push(res.data[vm.i]);
+              if (vm.option.series[0].data[vm.i].category==0)
+              {
                   //vm.option.series[0].data[i].prototype.symbol=null;
-                  vm.option.series[0].data[i].symbol = vm.categoryR;
-                }
-                else if(vm.option.series[0].data[i].category==1)
-                {// vm.option.series[0].data[i].prototype.symbol=null;
-                  vm.option.series[0].data[i].symbol = vm.categoryS;}
+                vm.option.series[0].data[vm.i].symbol = vm.categoryR;
               }
-              vm.foundDevice=vm.foundDevice+"拓扑发现了名为"+res.data[i].name+"的设备\n";
+              else if(vm.option.series[0].data[vm.i].category==1)
+              {// vm.option.series[0].data[i].prototype.symbol=null;
+                vm.option.series[0].data[vm.i].symbol = vm.categoryS;}
+              vm.foundDevice=vm.foundDevice+"拓扑发现了名为"+res.data[vm.i].name+"的设备\n";
               vm.chart1.setOption(vm.option);
               t=setTimeout("f",1000);
-            }
-            else{
+            }else
               clearTimeout(t);
-            }
           };
           f();
           console.log( vm.option.series[0].data[0]);
