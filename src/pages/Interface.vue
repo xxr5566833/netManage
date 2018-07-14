@@ -58,7 +58,6 @@
                   <td>
                     <!-- 这里我把adminstatus改成了status与1或者2的比较，不知道对不对 -->
                     <button  class="btn btn-primary" @click = "startFlowInterface(index)">开始监控</button>
-                    <button  class="btn btn-danger"  @click = "stopFlow">停止监控</button>
                   </td>
 
 
@@ -93,9 +92,9 @@
                   </div>
           </div>
           <div>
-            <a class="button is-info is-focused level-item" @click="startAllFlow">开始整体流量监控</a>
-            <a class="button is-info is-focused level-item" @click="stopFlow">停止流量监控</a>
-            <div id="InterfaceFlowAll" style="height:600px;"></div>
+            <button class="btn btn-primary" @click="startAllFlow">开始整体流量监控</button>
+            <button  class="btn btn-danger"  @click = "stopFlow">停止监控</button>
+            <div id="InterfaceFlowAll" style="width:100%;height:600px;"></div>
           </div>
         </div>
       </div>
@@ -159,7 +158,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          data:['入流量']
+          data:['入流量','出流量']
         },
         toolbox: {
           show: true,
@@ -176,11 +175,12 @@ export default {
         xAxis:  {
           type: 'category',
           axisLabel: {
-            formatter: '{value} 0s'
+            formatter: '{value} s'
           }
         },
         yAxis: {
-          type: 'category',
+          type: 'value',
+          boundaryGap: [0, '100%'],
           axisLabel: {
             formatter: '{value} MB'
           }
@@ -191,11 +191,11 @@ export default {
             type:'line',
             data:[],
           },
-         /* {
+         {
             name:'出流量',
             type:'line',
             data:[],
-          }*/
+          }
         ]
       };
       charts.setOption(option);
@@ -211,15 +211,15 @@ export default {
         };
         getFlow(para).then((res) => {
           vm.inFlow=[timetime,res.inBound.toFixed(0)];
-          /*vm.outFlow=[timetime,res.outBound.toFixed(2)];*/
+          vm.outFlow=[timetime,res.outBound.toFixed(2)];
           console.log("获取了一次");
           console.log(res);
           timetime++;
           option.series[0].data.push(vm.inFlow);
-         /* option.series[1].data.push(vm.outFlow);*/
+         option.series[1].data.push(vm.outFlow);
           charts.setOption(option);
         })
-      }, 10000);
+      }, 1000);
     },
     stopFlow(){
       this.$nextTick(() => {
