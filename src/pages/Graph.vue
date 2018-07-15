@@ -2,10 +2,10 @@
   <section class="hero">
     <div class="hero-body">
       <div class="container">
-        <a>
-          请输入拓扑起点IP（温馨提示：本拓扑发现不支持没有路由器的系统）
+        <h2>
+          请输入拓扑种子IP（温馨提示：本拓扑发现不支持没有路由器的系统）
         <input type="text" v-model="ip">
-        </a>
+        </h2>
         </div>
       <div><textarea style="width:80%;height:200px;" v-model="foundDevice"></textarea></div>
       <div><button class="btn btn-primary" @click="refreshNetGraph">开始拓扑发现</button>
