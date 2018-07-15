@@ -129,6 +129,12 @@ export const getTCP = params => {
     url: `${base}/getTCP`
   }).then(res => res.data)
 }
+export const getUDP = params => {
+  return axios({
+    method: 'get',
+    url: `${base}/getTCP`
+  }).then(res => res.data)
+}
 export const getFlow = params => {
   return axios({
     method: 'post',

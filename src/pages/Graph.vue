@@ -3,12 +3,13 @@
     <div class="hero-body">
       <div class="container">
         <h2>
-          请输入拓扑种子IP（温馨提示：本拓扑发现不支持没有路由器的系统）
+          请输入拓扑种子节点IP（温馨提示：本拓扑发现不支持没有路由器的系统）
         <input type="text" v-model="ip">
+          <button class="btn btn-primary" @click="refreshNetGraph">开始拓扑发现</button>
         </h2>
         </div>
       <div><textarea style="width:80%;height:200px;" v-model="foundDevice"></textarea></div>
-      <div><button class="btn btn-primary" @click="refreshNetGraph">开始拓扑发现</button>
+      <div>
         <!-- 这里放置网络拓扑图 -->
         <div id="NetGraph" style="height:800px;"></div></div>
       </div>
@@ -16,7 +17,7 @@
 </template>
 <script>
 
-  import { getNetGraph } from '../api/api'
+  import { getNetGraph,getInfo } from '../api/api'
 
   export default {
     name: 'Graph',
@@ -26,6 +27,7 @@
         ip:'127.0.0.1',
         foundDevice:'',
         i:0,
+        systemInfo:' ',
         dataIn:[],
         categoryR:'image://../../static/R.png',
         categoryS:'image://../../static/S.jpg',
@@ -117,7 +119,9 @@
         window.intervalObc="";
       },
     computed: {
-
+      info() {
+        return this.$store.state.info
+      }
     },
     methods: {
       initChart(){
@@ -125,35 +129,59 @@
         var vm=this;
         this.chart1=echarts.init(document.getElementById("NetGraph"));
         this.chart1.showLoading();
+        let para = {
+          ip: this.ip,
+          readcommunity: "public",
+          writecommunity: "private"
+        }
+        getInfo(para).then((res) => {
+          vm.systemInfo = res
+        })
         getNetGraph(vm.ip).then((res) => {
           // 直接更新interfaces
           vm.chart1.hideLoading();
+          vm.foundDevice="";
           vm.i=0;
           vm.dataIn=res.data;
-          console.log(vm.dataIn);
+          console.log(res);
+          let theFirst={
+            name:vm.systemInfo.sysName,
+          };
+          for(var ks=0;ks<vm.dataIn.length;ks++){
+            if (vm.dataIn[ks].category == 0) {
+              //vm.option.series[0].data[i].prototype.symbol=null;
+              vm.dataIn[ks].symbol = vm.categoryR;
+            }
+            else if (vm.dataIn[ks].category == 1) {// vm.option.series[0].data[i].prototype.symbol=null;
+              vm.dataIn[ks].symbol = vm.categoryS;
+            }
+            if(vm.dataIn[ks].name==theFirst.name)theFirst=vm.dataIn[ks];
+          }
+          vm.info.splice(0, vm.info.length);
+          for(var devi=0;devi<res.devs.length;devi++){
+            vm.info.push(res.devs[devi]);
+          }
+          vm.option.series[0].data.push(theFirst);
+          vm.foundDevice = vm.foundDevice + "拓扑发现了名为" + theFirst.name + "的设备\n";
+          vm.chart1.setOption(vm.option);
           vm.option.series[0].links=res.link;
+          console.log(vm.dataIn);
           window.intervalObc= setInterval(() => {
             {
               if(vm.i<vm.dataIn.length)
               {
-                vm.option.series[0].data.push(vm.dataIn[vm.i]);
-                console.log(vm.option.series[0].data);
-                if (vm.option.series[0].data[vm.i].category==0)
-                {
-                  //vm.option.series[0].data[i].prototype.symbol=null;
-                  vm.option.series[0].data[vm.i].symbol = vm.categoryR;
+                if(vm.dataIn[vm.i].name!=theFirst.name) {
+                  vm.option.series[0].data.push(vm.dataIn[vm.i]);
+                  console.log(vm.option.series[0].data);
+                  vm.foundDevice = vm.foundDevice + "拓扑发现了名为" + vm.dataIn[vm.i].name + "的设备\n";
+                  vm.chart1.setOption(vm.option);
                 }
-                else if(vm.option.series[0].data[vm.i].category==1)
-                {// vm.option.series[0].data[i].prototype.symbol=null;
-                  vm.option.series[0].data[vm.i].symbol = vm.categoryS;}
-                vm.foundDevice=vm.foundDevice+"拓扑发现了名为"+vm.dataIn[vm.i].name+"的设备\n";
-                vm.chart1.setOption(vm.option);
                 vm.i++;
               }else
                 clearInterval(window.intervalObc);
             }
           }, 1000);
-        })
+        });
           console.log("graph right");
       },
       refreshNetGraph(){

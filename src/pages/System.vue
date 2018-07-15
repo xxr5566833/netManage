@@ -35,7 +35,7 @@
                   <td>系统描述</td>
                   <td>{{systemInfo.sysDescr}}</td>
                 </tr>
-                <tr>
+                <tr v-show="deviceType=='host'">
                   <td>CPU利用率</td>
                   <td>{{systemInfo.sysCpuUsedRate}}%</td>
                 </tr>
@@ -60,7 +60,8 @@
     },
     data () {
       return {
-        systemInfo: ''
+        systemInfo: '',
+        deviceType:this.$store.state.deviceType
       }
     },
     mounted () {

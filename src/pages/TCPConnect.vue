@@ -5,7 +5,7 @@
         <div class="columns  is-multiline">
           <div class="column is-10 is-offset-1">
             <h1 class="title is-bold">
-              主机连接状态
+              主机TCP连接状态
             </h1>
             <div>
               <button class="btn btn-primary" @click="startWatchCon">开始监控</button>

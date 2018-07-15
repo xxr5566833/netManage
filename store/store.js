@@ -11,7 +11,8 @@ const store = new Vuex.Store({
     nodeStatus: [],
     selectedIp: '',
     selectedreadCommunity: '',
-    selectedwriteCommunity: ''
+    selectedwriteCommunity: '',
+    selectedType: '',
   },
   getters: {
 

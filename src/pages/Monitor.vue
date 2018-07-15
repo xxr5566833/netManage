@@ -275,12 +275,16 @@ export default {
     },*/
     // 这里改变了全局的ip和community
     toDetail(index) {
-      var ip = this.info[index].ip
-      var readcommunity = this.info[index].readcommunity
-      var writecommunity = this.info[index].writecommunity
-      this.$store.state.selectedIp = ip
-      this.$store.state.selectedreadCommunity = readcommunity
-      this.$store.state.selectedwriteCommunity = writecommunity
+      var ip = this.info[index].ip;
+      var readcommunity = this.info[index].readcommunity;
+      var writecommunity = this.info[index].writecommunity;
+      var deviceType = this.info[index].deviceType;
+      if(deviceType==0)deviceType="host";
+      console.log("devicetype是"+deviceType);
+      this.$store.state.selectedIp = ip;
+      this.$store.state.selectedreadCommunity = readcommunity;
+      this.$store.state.selectedwriteCommunity = writecommunity;
+      this.$store.state.deviceType=deviceType;
     },
     remove() {
       this.info.splice(this.currentIndex, 1);
