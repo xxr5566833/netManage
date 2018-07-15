@@ -62,11 +62,12 @@
           startWatchTCP(){
             clearInterval(window.intervalObh);
             var vm=this;
-            window.intervalObj=setInterval(() => {
+           // window.intervalObj=setInterval(() => {
               getTCP().then((res) => {
+                console.log(res);
                 vm.PCs=res;
               })
-            }, 1000);
+          //  }, 1000);
           }
       }
     }
