@@ -28,6 +28,7 @@
                   <th>Index</th>
                   <th>端口名</th>
                   <th>端口状态</th>
+                  <th>所属Vlan</th>
                   <!--<th>IP</th> 以后加，需要实现一些逻辑-->
                   <!--<th>子网掩码</th>-->
                   <th>入流量</th>
@@ -44,6 +45,7 @@
                   <td>{{i.index}}</td>
                   <td>{{i.ifDescr}}</td>
                   <td>{{i.ifOperStatus}}</td>
+                  <td>{{i.vlanIndex > 0 ? "Vlan" + i.vlanIndex : "没有Vlan"}}</td>
                   <!--<td>{{i.ip}}</td>
                   <td>{{i.netmask}}</td>-->
                   <td>{{i.inBound}}</td>
