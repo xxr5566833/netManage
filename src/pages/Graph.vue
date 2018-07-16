@@ -29,8 +29,15 @@
         i:0,
         systemInfo:' ',
         dataIn:[],
-        categoryR:'image://../../static/R.png',
-        categoryS:'image://../../static/S.jpg',
+        Rblue:'image://../../static/Rblue.png',
+        Rred:'image://../../static/Rred.png',
+        Ryellow:'image://../../static/Ryellow.png',
+        Sblue:'image://../../static/Sblue.png',
+        Sred:'image://../../static/Sred.png',
+        Syellow:'image://../../static/Syellow.png',
+        PCblue:'image://../../static/PCblue.png',
+        PCblue:'image://../../static/PCred.png',
+        PCyellow:'image://../../static/PCyellow.png',
         option : {
           title: {
             left: "center",
@@ -64,17 +71,6 @@
                   }
                 }
               },
-              categories:[{
-                name:"R",
-                symbol:'image://../../static/R.png'
-              },{
-                name:"S",
-                symbol:'image://../../static/S.jpg'
-              },
-                {
-                  name:"PC"
-                }
-              ],
               lineStyle:{
                 type:'dotted'
               },
@@ -150,10 +146,10 @@
           for(var ks=0;ks<vm.dataIn.length;ks++){
             if (vm.dataIn[ks].category == 0) {
               //vm.option.series[0].data[i].prototype.symbol=null;
-              vm.dataIn[ks].symbol = vm.categoryR;
+              vm.dataIn[ks].symbol = vm.Rblue;
             }
             else if (vm.dataIn[ks].category == 1) {// vm.option.series[0].data[i].prototype.symbol=null;
-              vm.dataIn[ks].symbol = vm.categoryS;
+              vm.dataIn[ks].symbol = vm.Sblue;
             }
             if(vm.dataIn[ks].name==theFirst.name)theFirst=vm.dataIn[ks];
           }

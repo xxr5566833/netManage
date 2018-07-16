@@ -13,6 +13,8 @@ const store = new Vuex.Store({
     selectedreadCommunity: '',
     selectedwriteCommunity: '',
     selectedType: '',
+    DataIn: [],
+    linkIn: [],
   },
   getters: {
 
