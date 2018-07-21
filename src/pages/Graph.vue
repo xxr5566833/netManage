@@ -28,7 +28,8 @@
         foundDevice:'',
         i:0,
         systemInfo:' ',
-        dataIn:[],
+        dataNewIn: [],
+        linkNewIn: [],
         Rblue:'image://../../static/Rblue.png',
         Rred:'image://../../static/Rred.png',
         Ryellow:'image://../../static/Ryellow.png',
@@ -36,7 +37,7 @@
         Sred:'image://../../static/Sred.png',
         Syellow:'image://../../static/Syellow.png',
         PCblue:'image://../../static/PCblue.png',
-        PCblue:'image://../../static/PCred.png',
+        PCred:'image://../../static/PCred.png',
         PCyellow:'image://../../static/PCyellow.png',
         option : {
           title: {
@@ -117,9 +118,51 @@
     computed: {
       info() {
         return this.$store.state.info
+      },
+      dataIn() {
+        return this.$store.state.dataIn
+      },
+      linkIn() {
+        return this.$store.state.linkIn
       }
     },
     methods: {
+      beBlue(ks){
+        var vm=this;
+        if (vm.dataIn[ks].category == 0) {
+          vm.dataIn[ks].symbol = vm.Rblue;
+        }
+        else if (vm.dataIn[ks].category == 1) {
+          vm.dataIn[ks].symbol = vm.Sblue;
+        }
+        else if (vm.dataIn[ks].category == 2) {
+          vm.dataIn[ks].symbol = vm.PCblue;
+        }
+      },
+      beRed(ks){
+        var vm=this;
+        if (vm.dataIn[ks].category == 0) {
+          vm.dataIn[ks].symbol = vm.Rred;
+        }
+        else if (vm.dataIn[ks].category == 1) {
+          vm.dataIn[ks].symbol = vm.Sred;
+        }
+        else if (vm.dataIn[ks].category == 2) {
+          vm.dataIn[ks].symbol = vm.PCred;
+        }
+      },
+      beYellow(ks){
+        var vm=this;
+        if (vm.dataIn[ks].category == 0) {
+          vm.dataIn[ks].symbol = vm.Ryellow;
+        }
+        else if (vm.dataIn[ks].category == 1) {
+          vm.dataIn[ks].symbol = vm.Syellow;
+        }
+        else if (vm.dataIn[ks].category == 2) {
+          vm.dataIn[ks].symbol = vm.PCyellow;
+        }
+      },
       initChart(){
         var echarts = require('echarts');
         var vm=this;
@@ -129,29 +172,38 @@
           ip: this.ip,
           readcommunity: "public",
           writecommunity: "private"
-        }
+        };
         getInfo(para).then((res) => {
           vm.systemInfo = res
-        })
+        });
         getNetGraph(vm.ip).then((res) => {
           // 直接更新interfaces
           vm.chart1.hideLoading();
           vm.foundDevice="";
           vm.i=0;
-          vm.dataIn=res.data;
+          vm.dataNewIn=res.data;
+          vm.linkNewIn=res.link;
           console.log(res);
           let theFirst={
             name:vm.systemInfo.sysName,
           };
           for(var ks=0;ks<vm.dataIn.length;ks++){
-            if (vm.dataIn[ks].category == 0) {
-              //vm.option.series[0].data[i].prototype.symbol=null;
-              vm.dataIn[ks].symbol = vm.Rblue;
+            beBlue(ks);
+            if(vm.dataIn[ks].name==theFirst.name)
+              theFirst=vm.dataIn[ks];
+          }
+          for(var ks=0;ks<vm.dataIn.length;ks++){
+            var isExist=0;
+            for(var kc=0;kc<vm.dataNewIn.length;kc++){
+              if(vm.dataIn[ks].name==vm.dataNewIn[kc].name)
+              {
+                isExist = 1;
+                break;
+              }
+              if(isExist==1)
+                beBlue(ks);
             }
-            else if (vm.dataIn[ks].category == 1) {// vm.option.series[0].data[i].prototype.symbol=null;
-              vm.dataIn[ks].symbol = vm.Sblue;
-            }
-            if(vm.dataIn[ks].name==theFirst.name)theFirst=vm.dataIn[ks];
+
           }
           vm.info.splice(0, vm.info.length);
           for(var devi=0;devi<res.devs.length;devi++){

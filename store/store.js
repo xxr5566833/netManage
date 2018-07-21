@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     selectedreadCommunity: '',
     selectedwriteCommunity: '',
     selectedType: '',
-    DataIn: [],
+    dataIn: [],
     linkIn: [],
   },
   getters: {
