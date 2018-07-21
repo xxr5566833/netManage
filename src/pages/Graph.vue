@@ -30,6 +30,7 @@
         systemInfo:' ',
         dataNewIn: [],
         linkNewIn: [],
+        FailDataIn:[],
         Rblue:'image://../../static/Rblue.png',
         Rred:'image://../../static/Rred.png',
         Ryellow:'image://../../static/Ryellow.png',
@@ -167,6 +168,7 @@
         var echarts = require('echarts');
         var vm=this;
         this.chart1=echarts.init(document.getElementById("NetGraph"));
+        vm.FailDataIn=[];
         this.chart1.showLoading();
         let para = {
           ip: this.ip,
@@ -183,27 +185,109 @@
           vm.i=0;
           vm.dataNewIn=res.data;
           vm.linkNewIn=res.link;
-          console.log(res);
+          console.log(vm.dataNewIn);
           let theFirst={
             name:vm.systemInfo.sysName,
           };
-          for(var ks=0;ks<vm.dataIn.length;ks++){
-            beBlue(ks);
-            if(vm.dataIn[ks].name==theFirst.name)
-              theFirst=vm.dataIn[ks];
+          for(var ks=0;ks<vm.dataNewIn.length;ks++){
+            if (vm.dataNewIn[ks].category == 0) {
+              vm.dataNewIn[ks].symbol = vm.Rblue;
+            }
+            else if (vm.dataNewIn[ks].category == 1) {
+              vm.dataNewIn[ks].symbol = vm.Sblue;
+            }
+            else if (vm.dataNewIn[ks].category == 2) {
+              vm.dataNewIn[ks].symbol = vm.PCblue;
+            }
+            if(vm.dataNewIn[ks].name==theFirst.name)
+              theFirst=vm.dataNewIn[ks];
           }
           for(var ks=0;ks<vm.dataIn.length;ks++){
             var isExist=0;
-            for(var kc=0;kc<vm.dataNewIn.length;kc++){
-              if(vm.dataIn[ks].name==vm.dataNewIn[kc].name)
-              {
+            for(var kc=0;kc<vm.dataNewIn.length;kc++) {
+              if (vm.dataIn[ks].name == vm.dataNewIn[kc].name) {
                 isExist = 1;
                 break;
               }
-              if(isExist==1)
-                beBlue(ks);
             }
-
+            if(isExist==1)
+              vm.beBlue(ks);
+          }
+          for(var ks=0;ks<vm.dataIn.length;ks++){
+            var isExist=0;
+            for(var kc=0;kc<vm.dataNewIn.length;kc++) {
+              if (vm.dataIn[ks].name == vm.dataNewIn[kc].name) {
+                isExist = 1;
+                break;
+              }
+            }
+            if(isExist==0)
+            {
+              console.log("断了一个"+vm.dataIn[ks].name);
+              vm.FailDataIn.push(vm.dataIn[ks].name);
+              console.log(vm.linkIn);
+              vm.beRed(ks);
+              for(var linka=0;linka<vm.linkIn.length;linka++){
+                if(vm.linkIn[linka].source==vm.dataIn[ks].name){
+                  var linkIsExist=0;
+                  for(var linkb=0;linkb<vm.dataNewIn.length;linkb++){
+                    if(vm.linkIn[linka].target==vm.dataNewIn[linkb].name){
+                      console.log("存在连接");
+                      linkIsExist=1;
+                      break;
+                    }
+                  }
+                  if(linkIsExist==1){
+                    console.log("寻找dataIN");
+                    for(var linkc=0;linkc<vm.dataIn.length;linkc++){
+                      if(vm.dataIn[linkc].name==vm.linkIn[linka].target){
+                        vm.beYellow(linkc);
+                        console.log("找到了dataIn"+linkc);
+                        console.log(vm.dataIn);
+                      }
+                    }
+                  }
+                }
+                else if(vm.linkIn[linka].target==vm.dataIn[ks].name){
+                  var linkIsExist=0;
+                  console.log("target");
+                  for(var linkb=0;linkb<vm.dataNewIn.length;linkb++){
+                    if(vm.linkIn[linka].source==vm.dataNewIn[linkb].name){
+                      linkIsExist=1;
+                      console.log("存在连接");
+                      break;
+                    }
+                  }
+                  if(linkIsExist==1){
+                    for(var linkc=0;linkc<vm.dataIn.length;linkc++){
+                      if(vm.dataIn[linkc].name==vm.linkIn[linka].source){
+                        vm.beYellow(linkc);
+                        console.log("找到了dataIn"+linkc);
+                        console.log(vm.dataIn);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          console.log("2");
+          for(var dataa=0;dataa<vm.dataNewIn.length;dataa++){
+            var isNewExist=0;
+            for(var datab=0;datab<vm.dataIn.length;datab++){
+              if(vm.dataNewIn[dataa].name==vm.dataIn[datab].name){
+                isNewExist=1;
+                break;
+              }
+            }
+            if(isNewExist==0){
+              console.log("加了一个");
+              vm.dataIn.push(vm.dataNewIn[dataa]);
+              for(var datac=0;datac<vm.linkNewIn.length;datac++){
+                if(vm.linkNewIn[datac].source==vm.dataNewIn[dataa].name||vm.linkNewIn[datac].target==vm.dataNewIn[dataa].name)
+                  vm.linkIn.push(vm.linkNewIn[datac]);
+              }
+            }
           }
           vm.info.splice(0, vm.info.length);
           for(var devi=0;devi<res.devs.length;devi++){
@@ -212,21 +296,23 @@
           vm.option.series[0].data.push(theFirst);
           vm.foundDevice = vm.foundDevice + "拓扑发现了名为" + theFirst.name + "的设备\n";
           vm.chart1.setOption(vm.option);
-          vm.option.series[0].links=res.link;
-          console.log(vm.dataIn);
+          vm.option.series[0].links=vm.linkIn;
           window.intervalObc= setInterval(() => {
             {
               if(vm.i<vm.dataIn.length)
               {
                 if(vm.dataIn[vm.i].name!=theFirst.name) {
                   vm.option.series[0].data.push(vm.dataIn[vm.i]);
-                  console.log(vm.option.series[0].data);
                   vm.foundDevice = vm.foundDevice + "拓扑发现了名为" + vm.dataIn[vm.i].name + "的设备\n";
                   vm.chart1.setOption(vm.option);
                 }
                 vm.i++;
-              }else
+              }else {
+                for(var failData=0;failData<vm.FailDataIn.length;failData++){
+                  vm.foundDevice = vm.foundDevice + vm.FailDataIn[failData] + "的连接中断\n";
+                }
                 clearInterval(window.intervalObc);
+              }
             }
           }, 1000);
         });
