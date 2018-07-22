@@ -9,9 +9,9 @@
         </h3>
         </div>
       <div><textarea style="width:50%;height:200px;" v-model="foundDevice"></textarea>
-        <div>蓝色代表正常</div>
-        <div>黄色代表相连的不正常</div>
-        <div>红色代表连接中断</div>
+        <div><span style="color: #2aabd2;font-size: 30px; ">蓝色</span>代表正常</div>
+        <div><span style="color: yellow;font-size: 30px;">黄色</span>代表相连的不正常</div>
+        <div><span style="color: red;font-size: 30px;">红色</span>代表连接中断</div>
       </div>
       <div>
         <!-- 这里放置网络拓扑图 -->
