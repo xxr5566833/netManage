@@ -24,7 +24,7 @@
               <tbody>
               <tr v-for="i in PCs">
                 <td>{{i.name}}</td>
-                <td v-for="k in i.connection">{{(k==0)?'没有连接':'存在连接'}}</td>
+                <td  v-bind:style="{'background-color': color(k)}" v-for="k in i.connection">{{(k==0)?'没有连接':'存在连接'}}</td>
               </tr>
               </tbody>
             </table>
@@ -51,6 +51,10 @@
           window.intervalObh="";
         },
       methods:{
+          color(k){
+            if(k==0)return "red";
+            else return "blue";
+          },
           startWatchCon(){
             this.$nextTick(() => {
               this.startWatchTCP();
