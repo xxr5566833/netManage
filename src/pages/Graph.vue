@@ -2,13 +2,17 @@
   <section class="hero">
     <div class="hero-body">
       <div class="container">
-        <h2>
-          请输入拓扑种子节点IP（温馨提示：本拓扑发现不支持没有路由器的系统）
+        <h3>
+          请输入拓扑发现种子节点IP（温馨提示：本拓扑发现不支持没有路由器和三层交换机的系统）
         <input type="text" v-model="ip">
           <button class="btn btn-primary" @click="refreshNetGraph">开始拓扑发现</button>
-        </h2>
+        </h3>
         </div>
-      <div><textarea style="width:80%;height:200px;" v-model="foundDevice"></textarea></div>
+      <div><textarea style="width:50%;height:200px;" v-model="foundDevice"></textarea>
+        <div>蓝色代表正常</div>
+        <div>黄色代表相连的不正常</div>
+        <div>红色代表连接中断</div>
+      </div>
       <div>
         <!-- 这里放置网络拓扑图 -->
         <div id="NetGraph" style="height:800px;"></div></div>
@@ -31,6 +35,7 @@
         dataNewIn: [],
         linkNewIn: [],
         FailDataIn:[],
+        PCData: [],
         Rblue:'image://../../static/Rblue.png',
         Rred:'image://../../static/Rred.png',
         Ryellow:'image://../../static/Ryellow.png',
@@ -111,6 +116,11 @@
       }
     },
     mounted() {
+      var echarts = require('echarts');
+      this.chart1=echarts.init(document.getElementById("NetGraph"));
+      this.option.series[0].data=this.dataIn;
+      this.option.series[0].links=this.linkIn;
+      this.chart1.setOption(this.option);
     },
     beforeCreate:
       function(){
@@ -293,6 +303,7 @@
           for(var devi=0;devi<res.devs.length;devi++){
             vm.info.push(res.devs[devi]);
           }
+          vm.option.series[0].data=[];
           vm.option.series[0].data.push(theFirst);
           vm.foundDevice = vm.foundDevice + "拓扑发现了名为" + theFirst.name + "的设备\n";
           vm.chart1.setOption(vm.option);
@@ -302,12 +313,30 @@
               if(vm.i<vm.dataIn.length)
               {
                 if(vm.dataIn[vm.i].name!=theFirst.name) {
-                  vm.option.series[0].data.push(vm.dataIn[vm.i]);
-                  vm.foundDevice = vm.foundDevice + "拓扑发现了名为" + vm.dataIn[vm.i].name + "的设备\n";
-                  vm.chart1.setOption(vm.option);
+                  if(vm.dataIn[vm.i].category==2){
+                    vm.PCData.push(vm.dataIn[vm.i]);
+                  }
+                  else {
+                    vm.option.series[0].data.push(vm.dataIn[vm.i]);
+                    vm.foundDevice = vm.foundDevice + "拓扑发现了名为" + vm.dataIn[vm.i].name + "的设备\n";
+                    for(var PCnum=0;PCnum<vm.PCData.length;PCnum++){
+                      vm.option.series[0].data.push(vm.PCData[PCnum]);
+                      vm.foundDevice = vm.foundDevice + "拓扑发现了名为" + vm.PCData[PCnum].name + "的设备\n";
+                    }
+                    vm.PCData=[];
+                    vm.chart1.setOption(vm.option);
+                  }
                 }
                 vm.i++;
               }else {
+                if(vm.PCData!=[]){
+                  for(var PCnum=0;PCnum<vm.PCData.length;PCnum++){
+                    vm.option.series[0].data.push(vm.PCData[PCnum]);
+                    vm.foundDevice = vm.foundDevice + "拓扑发现了名为" + vm.PCData[PCnum].name + "的设备\n";
+                  }
+                  vm.PCData=[];
+                  vm.chart1.setOption(vm.option);
+                }
                 for(var failData=0;failData<vm.FailDataIn.length;failData++){
                   vm.foundDevice = vm.foundDevice + vm.FailDataIn[failData] + "的连接中断\n";
                 }

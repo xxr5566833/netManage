@@ -10,7 +10,7 @@
             <div>
               <button class="btn btn-primary" @click="startWatchCon">开始监控</button>
               <button  class="btn btn-danger"  @click = "stopWctchCon">停止监控</button>
-            </div>
+            </div>        <div id="NetGraph" style="height:100px;"></div></div>
           </div>
           <div class="column is-10 is-offset-1 " style="overflow-x: auto; overflow-y: auto; height: 300px; width:90%;">
             <!-- 如果interfaces是空，那就直接不显示表格 -->
@@ -60,10 +60,14 @@
             clearInterval(window.intervalObh)
           },
           startWatchTCP(){
+            var echarts = require('echarts');
+            this.chart1=echarts.init(document.getElementById("NetGraph"));
+            this.chart1.showLoading();
             clearInterval(window.intervalObh);
             var vm=this;
             window.intervalObj=setInterval(() => {
               getTCP().then((res) => {
+                vm.chart1.hideLoading();
                 console.log(res);
                 vm.PCs=res;
               })

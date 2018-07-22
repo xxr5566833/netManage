@@ -15,7 +15,7 @@
           </div>
           <div class="column is-10 is-offset-1 " v-if="!(vlans === '')">
             <!-- 如果interfaces是空，那就直接不显示表格 -->
-            <table class="table-bordered table-condensed" style='width:90%' >
+            <table class="table-bordered table-condensed" style='width:100%' >
               <thead>
                 <tr>
                   <th>Index</th>

@@ -45,7 +45,7 @@
                   <td>{{i.index}}</td>
                   <td>{{i.ifDescr}}</td>
                   <td>{{i.ifOperStatus}}</td>
-                  <td>{{i.vlanIndex > 0 ? "Vlan" + i.vlanIndex : "没有Vlan"}}</td>
+                  <td>{{i.vlanIndex > 0 ? "Vlan" + i.vlanIndex : "无"}}</td>
                   <!--<td>{{i.ip}}</td>
                   <td>{{i.netmask}}</td>-->
                   <td>{{i.inBound}}</td>
