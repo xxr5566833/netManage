@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     selectedIp: '',
     selectedreadCommunity: '',
     selectedwriteCommunity: '',
+    selectedName: '',
     selectedType: '',
     dataIn: [],
     linkIn: [],

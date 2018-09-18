@@ -344,6 +344,7 @@
               }
             }
           }, 1000);
+          vm.foundDevice = vm.foundDevice + "拓扑发现已完成\n";
         });
           console.log("graph right");
       },

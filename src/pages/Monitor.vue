@@ -1,4 +1,4 @@
-<template lang="html">
+ <template lang="html">
   <section class="hero">
     <div class="hero-body">
       <div class="container">
@@ -48,9 +48,9 @@
             <table class="table is-bordered" v-if="!(info === '')">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>名称</th>
-                  <th>IP</th>
+                  <th>索引</th>
+                  <th>设备名称</th>
+                  <th>管理IP</th>
                   <th>readCommunity</th>
                   <th>writeCommunity</th>
                   <th>操作</th>
@@ -279,12 +279,14 @@ export default {
       var readcommunity = this.info[index].readcommunity;
       var writecommunity = this.info[index].writecommunity;
       var deviceType = this.info[index].deviceType;
+      var name = this.info[index].name;
       if(deviceType==0)deviceType="host";
       console.log("devicetype是"+deviceType);
       this.$store.state.selectedIp = ip;
       this.$store.state.selectedreadCommunity = readcommunity;
       this.$store.state.selectedwriteCommunity = writecommunity;
       this.$store.state.deviceType=deviceType;
+      this.$store.state.selectedName = name;
     },
     remove() {
       this.info.splice(this.currentIndex, 1);

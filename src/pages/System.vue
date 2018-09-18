@@ -8,11 +8,11 @@
             <table class="table is-bordered" v-if="!(systemInfo === '')">
               <tbody>
                 <tr >
-                  <td>系统名称</td>
+                  <td>设备名称</td>
                   <td>{{systemInfo.sysName}}</td>
                 </tr>
                 <tr >
-                  <td>系统IP</td>
+                  <td>管理IP</td>
                   <td>{{$store.state.selectedIp}}</td>
                 </tr>
                 <tr >
@@ -24,11 +24,11 @@
                   <td>{{systemInfo.sysLocation}}</td>
                 </tr>
                 <tr >
-                  <td>SysOID</td>
+                  <td>系统标识</td>
                   <td>{{systemInfo.sysObjectId}}</td>
                 </tr>
                 <tr >
-                  <td>启动时间</td>
+                  <td>启动时长</td>
                   <td>{{timestamp}}</td>
                 </tr>
                 <tr >

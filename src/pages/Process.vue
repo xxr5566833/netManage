@@ -10,7 +10,7 @@
               进程查看
             </h1>
             <h2 class="subtitle ">
-              {{$store.state.selectedIp}}
+              {{$store.state.selectedName}}
             </h2>
           </div>
           <div class="column is-10 is-offset-1 " v-if="!(processes === '')">

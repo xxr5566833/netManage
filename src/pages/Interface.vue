@@ -9,7 +9,7 @@
               端口列表
             </h1>
             <h2 class="subtitle ">
-              {{$store.state.selectedIp}}
+              {{$store.state.selectedName}}
             </h2>
             <div class="columns is-multiline">
               <div class="column is-2" v-for="i in interfaces">
@@ -81,10 +81,10 @@
                           您确定要{{ interfaces[currentIndex].ifOperStatus === 'UP' ? '禁用' : '启用'}}名字为{{interfaces[currentIndex].ifDescr}}的端口吗？
                         </div>
                         <div class="modal-footer">
-                          <button type="button"  class="btn btn-default" data-dismiss="modal">关闭
+                          <button type="button"  class="btn btn-default" data-dismiss="modal">取消
                           </button>
                           <button type="button" class="btn btn-danger" data-dismiss="modal" @click = setStatus()>
-                            更改
+                            确定
                           </button>
                         </div>
                       </div>

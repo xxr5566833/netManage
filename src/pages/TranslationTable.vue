@@ -10,7 +10,7 @@
               地址转换表查看
             </h1>
             <h2 class="subtitle ">
-              {{$store.state.selectedIp}}
+              {{$store.state.selectedName}}
             </h2>
           </div>
           <div class="column is-10 is-offset-1 " v-if="!(tables === '')">
@@ -18,8 +18,8 @@
             <table class="table-bordered table-condensed" style='width:90%' >
               <thead>
               <tr>
-                <th>Index</th>
-                <th>对应的端口index</th>
+                <th>索引</th>
+                <th>对应的端口索引</th>
                 <th>物理地址</th>
                 <th>IP地址</th>
                 <th>类型</th>
